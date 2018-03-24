@@ -23,14 +23,14 @@ class LoginHandler(BaseHandler):
             "in": self.log_in,
             "out": self.log_out
         }
-        self.write(methods[option]())
+        methods[option]()
 
     def log_in(self):
         global visitor_id
         if not self.get_secure_cookie("MW"):
             self.set_secure_cookie("MW",  self.params.get("name", "游客%s" % visitor_id))
             visitor_id += 1
-        return {"status": 0, "message": "登陆成功"}
+        self.write({"status": 1, "message": "登陆成功"})
 
     def log_out(self):
         self.set_secure_cookie("MW", "")
