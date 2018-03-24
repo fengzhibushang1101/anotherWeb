@@ -9,6 +9,8 @@
 
 from views.base import BaseHandler
 
+visitor_id = 0
+
 
 class LoginHandler(BaseHandler):
 
@@ -24,8 +26,10 @@ class LoginHandler(BaseHandler):
         self.write(methods[option]())
 
     def log_in(self):
+        global visitor_id
         if not self.get_secure_cookie("MW"):
-            self.set_secure_cookie("MW",  self.params.get("name", "游客"))
+            self.set_secure_cookie("MW",  self.params.get("name", "游客%s" % visitor_id))
+            visitor_id += 1
         return {"status": 0, "message": "登陆成功"}
 
     def log_out(self):
