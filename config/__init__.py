@@ -15,7 +15,7 @@ from lib.utils.dictFromModel import dict_from_model
 
 default_env = "development"
 
-execute_env = os.environ.get("FURION_ENV", default_env)
+execute_env = os.environ.get("PROCESS_ENV", default_env)
 
 
 if execute_env.lower() in ["production"]:

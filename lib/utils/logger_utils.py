@@ -71,7 +71,7 @@ class Logging(object):
                 handler = logging.StreamHandler()
 
             formatter = ColoredFormatter(
-                "%(asctime)s\t%(process)d|%(thread)d\t%(levelname)s\t%(module)s\t%(funcName)s:%(lineno)d\t%(message)s"
+                "%(asctime)s\t%(process)d|%(threadName)s\t%(thread)d\t%(levelname)s\t%(module)s\t%(funcName)s:%(lineno)d\t%(message)s"
             )
             handler.setFormatter(formatter)
 
@@ -88,4 +88,4 @@ class Logging(object):
         return log_level
 
 
-logger = Logging.get_logger('Furion', log_file=settings.log_file)
+logger = Logging.get_logger('myweb', log_file=settings.log_file)
