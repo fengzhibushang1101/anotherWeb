@@ -1,10 +1,14 @@
 {% extends "../layout/layout.html" %}
 {% block css %}
+<link href="{{ static_url("css/index/login.css") }}" rel="stylesheet">
 {% end %}
 {% block title %}
 <title>首页</title>
 {% end %}
 
 {% block main %}
-<div class="auth-area">1111111111111111</div>
+你好呀!{{ name }}!
+{% end %}
+{% block javascript %}
+    <script src="{{ static_url('js/index/index.js') }}" ></script>
 {% end %}

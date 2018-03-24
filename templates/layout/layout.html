@@ -29,8 +29,7 @@
     <script>String.prototype.format= function(){var args = arguments;return this.replace(/\{(\d+)\}/g,function(s,i){return args[i]})};</script>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="{{ static_url('js/register/logout.js') }}"></script>
-    <script src="{{ static_url('js/common/inform.js') }}"></script>
+    <script src="{{ static_url('js/layout/layout.js') }}"></script>
     {% block javascript %}
     {% end %}
 </body>

@@ -17,21 +17,19 @@ from tornado import ioloop, web, options, httpserver
 from config import settings
 from lib.utils.logger_utils import logger
 from views.index import IndexHandler
+from views.log import LoginHandler
 
 options.define('port', default=8080, type=int)
-
-
 
 SETTINGS = dict(
     template_path=os.path.join(os.path.dirname(sys.argv[0]), "templates"),
     static_path=os.path.join(os.path.dirname(sys.argv[0]), "static"),
     login_url="/",
+    cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo="
 )
-
-
-
 urls = [
-    (r'/', IndexHandler)
+    (r'/', IndexHandler),
+    (r'/log(in|out)', LoginHandler)
 ]
 
 

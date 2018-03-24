@@ -1,0 +1,26 @@
+{% extends "../layout/layout.html" %}
+{% block css %}
+<link href="{{ static_url("css/index/login.css") }}" rel="stylesheet">
+{% end %}
+{% block title %}
+<title>首页</title>
+{% end %}
+
+{% block main %}
+<div class="auth-area">
+    <div class="input-frame">
+        <div class="input-box">
+            <input type="text" name="username" id="mobile" placeholder="您的手机号" />
+        </div>
+        <div class="line"></div>
+        <div class="input-box">
+            <input type="password" name="password" id="pwd" placeholder="密码"/>
+        </div>
+        <div class="line"></div>
+        <button type="button" id="log-in">登录</button>
+    </div>
+</div>
+{% end %}
+{% block javascript %}
+    <script src="{{ static_url('js/index/index.js') }}" ></script>
+{% end %}

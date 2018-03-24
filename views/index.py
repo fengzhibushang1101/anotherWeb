@@ -6,14 +6,20 @@
  @Software: PyCharm
  @Description: 
 """
-from views.base import BaseHandler
+from views.base import BaseHandler, authenticated
 
 
 class IndexHandler(BaseHandler):
 
     def get(self, *args, **kwargs):
-        print self.current_user
-        self.render("index/index.html")
+        user = self.current_user
+        render_settings = dict()
+        render_settings["name"] = user
+        if not user:
+            self.render("index/login.html", **render_settings)
+        else:
+            self.render("index/index.html", **render_settings)
 
+    @authenticated
     def post(self, *args, **kwargs):
         pass

@@ -74,6 +74,13 @@ class BaseHandler(SessionBaseHandler):
         logger.info(self.session.get("user_id"))
         self.write_error(404)
 
+    def write_error(self, status_code, **kwargs):
+        self.set_status(status_code)
+        self.write(str(status_code))
+
+    def get_current_user(self):
+        return self.get_secure_cookie("MW")
+
 
 def authenticated(method):
     """Decorate methods with this to require that the user be logged in.
