@@ -15,3 +15,13 @@ import os
 LOG_PATH = '/logs/myweb/'
 LOG_FILE = os.path.sep.join([LOG_PATH, 'myweb.log'])
 DEFAULT_LOG_SIZE = 1024*1024*50
+
+# mysql configure
+ECHO_SQL = False
+
+DB = {
+    "user": "myweb",
+    "password": "!w251192185",
+    "host": "127.0.0.1",
+    "db_name": "myweb",
+}
