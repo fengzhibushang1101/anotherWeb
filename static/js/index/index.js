@@ -7,4 +7,8 @@
             location.href = "/";
         })
     });
+    $("#register").click(function() {
+        $.post("/login")
+
+    })
 })();
