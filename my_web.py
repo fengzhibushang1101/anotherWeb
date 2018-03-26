@@ -18,6 +18,7 @@ from config import settings
 from lib.utils.logger_utils import logger
 from views.index import IndexHandler
 from views.log import LoginHandler
+from views.register import RegisterHandler
 
 options.define('port', default=8080, type=int)
 
@@ -29,7 +30,8 @@ SETTINGS = dict(
 )
 urls = [
     (r'/', IndexHandler),
-    (r'/log(in|out)', LoginHandler)
+    (r'/log(in|out)', LoginHandler),
+    (r'/register', RegisterHandler)
 ]
 
 
