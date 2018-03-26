@@ -19,6 +19,7 @@ from lib.utils.logger_utils import logger
 from views.index import IndexHandler
 from views.log import LoginHandler
 from views.register import RegisterHandler
+from views.webhook import WebHookHandler
 
 options.define('port', default=8080, type=int)
 
