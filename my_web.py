@@ -31,7 +31,8 @@ SETTINGS = dict(
 urls = [
     (r'/', IndexHandler),
     (r'/log(in|out)', LoginHandler),
-    (r'/register', RegisterHandler)
+    (r'/register', RegisterHandler),
+    (r'/webhook', WebHookHandler)
 ]
 
 
