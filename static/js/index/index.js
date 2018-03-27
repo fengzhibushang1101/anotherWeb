@@ -3,8 +3,13 @@
         $.post("/login", {
             mobile: $("#mobile").val().trim(),
             pwd: $("#pwd").val().trim()
-        }).done(function () {
-            location.href = "/";
+        }).done(function (data) {
+            if (data.status) {
+                location.href = "/"
+            } else {
+                alert(data.message);
+            }
+
         })
     });
     $("#register").click(function() {
@@ -12,10 +17,12 @@
         var password = $("#new-pwd").val().trim();
         var password2 = $("#new-pwd2").val().trim();
         if (!mobile || !password) {
-            alert("密码或者账号不能为空!")
+            alert("密码或者账号不能为空!");
+            return;
         }
         if (password !== password2) {
-            alert("两次密码不一致!")
+            alert("两次密码不一致!");
+            return;
         }
         $.post("/register", {
             mobile: mobile,

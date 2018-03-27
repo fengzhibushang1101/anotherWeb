@@ -38,7 +38,7 @@ class RegisterHandler(BaseHandler):
                     return {"status": 0, "message": "用户已存在"}
                 else:
                     user = User.create(session, mobile, password)
-                    self.set_secure_cookie("MW", "游客%s" % user.id)
+                    self.session["user_id"] = user.id
                     return {"status": 1, "message": "注册成功!"}
         except NullArgumentException, e:
             return {"status": 0, "message": e.msg}

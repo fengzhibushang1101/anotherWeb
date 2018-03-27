@@ -29,6 +29,20 @@ SETTINGS = dict(
     login_url="/",
     cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo="
 )
+
+session_settings = dict(
+    driver="redis",
+    driver_settings=dict(
+        host=settings.redis_host,
+        port=settings.redis_port,
+        db=settings.redis_db,
+        password=settings.redis_password,
+        max_connections=settings.redis_max_connections
+    ),
+    cookie_config=dict(
+        expires_days=30,
+    )
+)
 urls = [
     (r'/', IndexHandler),
     (r'/log(in|out)', LoginHandler),
@@ -42,6 +56,7 @@ def main():
         options.parse_command_line()
         port = options.options.port
         settings.configure('PORT', port)
+        SETTINGS.update(session=session_settings)
         app = web.Application(handlers=urls, debug=True, **SETTINGS)
         server = httpserver.HTTPServer(app)
         server.listen(settings.port)

@@ -14,6 +14,8 @@ from tornado.web import HTTPError
 from torndsession.sessionhandler import SessionBaseHandler
 from tornado.escape import to_unicode
 
+from lib.sql.session import sessionCM
+from lib.sql.user import User
 from lib.utils.logger_utils import logger
 
 
@@ -79,7 +81,13 @@ class BaseHandler(SessionBaseHandler):
         self.write(str(status_code))
 
     def get_current_user(self):
-        return self.get_secure_cookie("MW")
+        try:
+            user_id = self.session["user_id"]
+            with sessionCM() as session:
+                user = User.find_by_id(session, user_id)
+                return user
+        except Exception, e:
+            logger.info(e.message)
 
 
 def authenticated(method):

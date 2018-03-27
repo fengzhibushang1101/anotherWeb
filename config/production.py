@@ -25,3 +25,10 @@ DB = {
     "host": "127.0.0.1",
     "db_name": "myweb",
 }
+
+# redis configure
+REDIS_HOST = "127.0.0.1"
+REDIS_PORT = 6379
+REDIS_DB = 0
+REDIS_PASSWORD = "n1UUi4IKc1m2hV277eZtYW9T451p5lV3tSHAFJ647Xai83U44izwm2ciXDrxt05p"
+REDIS_MAX_CONNECTIONS = 1024
