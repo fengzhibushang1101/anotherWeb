@@ -57,7 +57,7 @@ def send_mail(subject,
 
     try:
         auth_info = {"name": name, "user": account, "passwd": password}
-        smtp = smtplib.SMTP(auth_info["name"], 25, timeout=20)
+        smtp = smtplib.SMTP_SSL(auth_info["name"], 465, timeout=20)
         smtp.login(auth_info["user"], auth_info["passwd"])
         smtp.sendmail(fro, real_to, msg.as_string())
         smtp.quit()
@@ -66,3 +66,5 @@ def send_mail(subject,
         print "@@@@@@@@@@"
         print "this time is to send content: %s" % text
         print traceback.format_exc(e)
+
+
