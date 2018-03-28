@@ -17,8 +17,9 @@ default_env = "development"
 
 execute_env = os.environ.get("PROCESS_ENV", default_env)
 
+env = execute_env.lower()
 
-if execute_env.lower() in ["production"]:
+if env in ["production"]:
     config = production
 else:
     config = developement
