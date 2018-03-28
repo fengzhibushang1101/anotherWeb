@@ -63,6 +63,6 @@ def send_mail(subject,
         smtp.quit()
 
     except Exception, e:
-        print "@@@@@@@@@@@"
+        print "@@@@@@@@@@"
         print "this time is to send content: %s" % text
         print traceback.format_exc(e)
