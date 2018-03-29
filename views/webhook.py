@@ -16,5 +16,5 @@ class WebHookHandler(BaseHandler):
         import subprocess
         cwd = "/root/src/anotherWeb"
         subprocess.Popen("git pull origin master; supervisorctl restart all; echo '更新成功!!!'", cwd=cwd, shell=True)
-        send_mail.delay("git更新成功!", "网站更新成功!", to=["fengzhibushang@163.com"])
+        send_mail.delay("更新通知", "网站更新成功!", to=["fengzhibushang@163.com"])
 
