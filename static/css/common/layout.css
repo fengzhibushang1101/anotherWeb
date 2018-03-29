@@ -6,6 +6,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-height: 100vh;
 }
 body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 {
     font-family: Microsoft YaHei, '宋体', Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
@@ -21,14 +22,14 @@ a:link, a:visited{
     text-decoration: none;
 }
 
-.header, .body, .footer {
+.header, .footer {
     flex: 1;
 }
 .body {
-    min-height: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex: 1 0 auto;
 }
 .header {
     font-size: 30px;

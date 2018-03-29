@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="个人网站, es6学习, javascript学习, 服务器学习">
     <meta name="keywords" content="Javascript，设计模式，python，linux">
     {% block title %}
     {% end %}
     <link href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://v4.bootcss.com/docs/4.0/examples/sticky-footer-navbar/sticky-footer-navbar.css" rel="stylesheet">
     <link href="{{ static_url("css/common/style.css") }}" rel="stylesheet">
     <link href="{{ static_url("css/common/layout.css") }}" rel="stylesheet">
     {% block css %}
@@ -18,12 +19,12 @@
       <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
+<body >
     {% include header.html %}
-    <div class="body">
+    <main role="main" class="container body">
     {% block main %}
     {% end %}
-    </div>
+    </main>
 
     {% include footer.html %}
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
