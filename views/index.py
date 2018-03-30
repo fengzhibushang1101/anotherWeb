@@ -13,9 +13,7 @@ class IndexHandler(BaseHandler):
 
     @authenticated
     def get(self, *args, **kwargs):
-        user = self.current_user
-        render_settings = dict()
-        render_settings["name"] = "UID:%s" % user.id
+        render_settings = self.gen_render_settings()
         self.render("index/index.html", **render_settings)
 
     @authenticated

@@ -13,6 +13,5 @@ class SignHandler(BaseHandler):
 
     def get(self, *args, **kwargs):
         option = args[0]
-        render_settings = dict()
-        render_settings["name"] = ""
+        render_settings = self.gen_render_settings()
         self.render("index/sign%s.html" % option, **render_settings)

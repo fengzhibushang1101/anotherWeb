@@ -17,9 +17,6 @@ from views.base import BaseHandler
 
 class RegisterHandler(BaseHandler):
 
-    def get(self, *args, **kwargs):
-        self.write_error(404)
-
     def post(self, *args, **kwargs):
         self.write(self.add_new_user())
 

@@ -89,6 +89,16 @@ class BaseHandler(SessionBaseHandler):
         except Exception, e:
             logger.info(e.message)
 
+    def gen_render_settings(self):
+        user = self.current_user
+        render_settings = dict()
+        if not user:
+            render_settings["name"] = ""
+        else:
+            render_settings["name"] = user.name if user.name else "游客:%s" % user.id
+        return render_settings
+
+
 
 def authenticated(method):
     """Decorate methods with this to require that the user be logged in.
@@ -119,3 +129,4 @@ def authenticated(method):
             raise HTTPError(403)
         return method(self, *args, **kwargs)
     return wrapper
+

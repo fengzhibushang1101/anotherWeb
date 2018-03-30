@@ -38,3 +38,7 @@ a:link, a:visited{
     background-color: black;
     color: white;
 }
+
+.welcome {
+    color: white;
+}
