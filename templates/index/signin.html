@@ -1,43 +1,76 @@
 {% extends "../layout/layout.html" %}
 {% block css %}
 <link href="{{ static_url("css/index/login.css") }}" rel="stylesheet">
+<link href="{{ static_url("css/index/sign.css") }}" rel="stylesheet">
 {% end %}
 {% block title %}
 <title>首页</title>
 {% end %}
 
 {% block main %}
-<div class="auth-area">
-    <div class="input-frame">
-        <div class="input-box">
-            <input type="text" name="username" id="mobile" placeholder="您的手机号" />
+
+
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="container container--mini">
+                <img class="" alt="">
+                <div>
+                    <div class="form-group">
+                        <label for="user_login">手机号</label>
+                        <input type="text" name="log" id="mobile" class="form-control" value="" size="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="user_pass">Password</label>
+                        <a class="form-sublink" href="#">忘记密码?那没辙了!</a>
+                        <input type="password" name="pwd" id="pwd" class="form-control" value="" size="20">
+                    </div>
+
+{#                    <p class="login-remember"><label><input name="rememberme" type="checkbox" id="rememberme"#}
+{#                                                            value="forever"> Remember Me</label></p>#}
+                    <div class="form-group">
+                        <input type="submit" name="wp-submit" id="log-in" class="btn btn-success btn-block mb-4"
+                               value="Sign In">
+                    </div>
+
+                </div>
+                <p class="small text-center text-gray-soft">Don't have an account yet? <a
+                        href="/signup">Sign up</a></p>
+            </div>
         </div>
-        <div class="line"></div>
-        <div class="input-box">
-            <input type="password" name="password" id="pwd" placeholder="密码"/>
-        </div>
-        <div class="line"></div>
-        <button type="button" id="log-in">登录</button>
     </div>
-{#    <p>---------------------------------------------</p>#}
-{#    <p class="align-center">下面是注册,不要在意细节</p>#}
-{#    <p>---------------------------------------------</p>#}
+</section>
+{#<div class="auth-area">#}
 {#    <div class="input-frame">#}
 {#        <div class="input-box">#}
-{#            <input type="text" name="username" id="new-mobile" placeholder="您的手机号" />#}
+{#            <input type="text" name="username" id="mobile" placeholder="您的手机号"/>#}
 {#        </div>#}
 {#        <div class="line"></div>#}
 {#        <div class="input-box">#}
-{#            <input type="password" name="password" id="new-pwd" pglaceholder="密码"/>#}
-{#        </div>#}
-{#        <div class="input-box">#}
-{#            <input type="password" name="password" id="new-pwd2" placeholder="确认密码密码"/>#}
+{#            <input type="password" name="password" id="pwd" placeholder="密码"/>#}
 {#        </div>#}
 {#        <div class="line"></div>#}
-{#        <button type="button" id="register">注册</button>#}
+{#        <button type="button" id="log-in">登录</button>#}
 {#    </div>#}
-</div>
+    {#    <p>---------------------------------------------</p>#}
+    {#    <p class="align-center">下面是注册,不要在意细节</p>#}
+    {#    <p>---------------------------------------------</p>#}
+    {#    <div class="input-frame">#}
+    {#        <div class="input-box">#}
+    {#            <input type="text" name="username" id="new-mobile" placeholder="您的手机号" />#}
+    {#        </div>#}
+    {#        <div class="line"></div>#}
+    {#        <div class="input-box">#}
+    {#            <input type="password" name="password" id="new-pwd" pglaceholder="密码"/>#}
+    {#        </div>#}
+    {#        <div class="input-box">#}
+    {#            <input type="password" name="password" id="new-pwd2" placeholder="确认密码密码"/>#}
+    {#        </div>#}
+    {#        <div class="line"></div>#}
+    {#        <button type="button" id="register">注册</button>#}
+    {#    </div>#}
+{#</div>#}
 {% end %}
 {% block javascript %}
-    <script src="{{ static_url('js/index/index.js') }}" ></script>
+<script src="{{ static_url('js/index/index.js') }}"></script>
 {% end %}

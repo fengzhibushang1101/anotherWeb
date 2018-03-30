@@ -1,13 +1,46 @@
 {% extends "../layout/layout.html" %}
 {% block css %}
 <link href="{{ static_url("css/index/login.css") }}" rel="stylesheet">
+<link href="{{ static_url("css/index/sign.css") }}" rel="stylesheet">
 {% end %}
 {% block title %}
 <title>首页</title>
 {% end %}
 
 {% block main %}
-<div class="auth-area">
+
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="container container--mini">
+                <img class="" alt="">
+                <div>
+                    <div class="form-group">
+                        <label for="user_login">手机号</label>
+                        <input type="text" name="log" id="new-mobile" class="form-control" value="" size="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="user_pass">密码</label>
+                        <input type="password" name="pwd" id="new-pwd" class="form-control" value="" size="20">
+                    </div>
+                    <div class="form-group">
+                        <label for="user_pass2">重复密码</label>
+                        <input type="password" name="pwd" id="new-pwd2" class="form-control" value="" size="20">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" name="wp-submit" id="register" class="btn btn-success btn-block mb-4"
+                               value="Sign Up">
+                    </div>
+
+                </div>
+                <p class="small text-center text-gray-soft">Already have an account?
+                    <a href="/signin">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{#<div class="auth-area">#}
 {#    <div class="input-frame">#}
 {#        <div class="input-box">#}
 {#            <input type="text" name="username" id="mobile" placeholder="您的手机号" />#}
@@ -22,21 +55,21 @@
 {#    <p>---------------------------------------------</p>#}
 {#    <p class="align-center">下面是注册,不要在意细节</p>#}
 {#    <p>---------------------------------------------</p>#}
-    <div class="input-frame">
-        <div class="input-box">
-            <input type="text" name="username" id="new-mobile" placeholder="您的手机号" />
-        </div>
-        <div class="line"></div>
-        <div class="input-box">
-            <input type="password" name="password" id="new-pwd" pglaceholder="密码"/>
-        </div>
-        <div class="input-box">
-            <input type="password" name="password" id="new-pwd2" placeholder="确认密码密码"/>
-        </div>
-        <div class="line"></div>
-        <button type="button" id="register">注册</button>
-    </div>
-</div>
+{#    <div class="input-frame">#}
+{#        <div class="input-box">#}
+{#            <input type="text" name="username" id="new-mobile" placeholder="您的手机号" />#}
+{#        </div>#}
+{#        <div class="line"></div>#}
+{#        <div class="input-box">#}
+{#            <input type="password" name="password" id="new-pwd" pglaceholder="密码"/>#}
+{#        </div>#}
+{#        <div class="input-box">#}
+{#            <input type="password" name="password" id="new-pwd2" placeholder="确认密码密码"/>#}
+{#        </div>#}
+{#        <div class="line"></div>#}
+{#        <button type="button" id="register">注册</button>#}
+{#    </div>#}
+{#</div>#}
 {% end %}
 {% block javascript %}
     <script src="{{ static_url('js/index/index.js') }}" ></script>

@@ -45,7 +45,7 @@ session_settings = dict(
     )
 )
 urls = [
-    (r'/', IndexHandler),
+    (r'/(index)?', IndexHandler),
     (r'/log(in|out)', LoginHandler),
     (r'/sign(in|up)', SignHandler),
     (r'/register', RegisterHandler),

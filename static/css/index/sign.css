@@ -1,0 +1,23 @@
+
+.section {
+    width: 100%;
+}
+
+.form-sublink {
+    float: right;
+}
+
+@media (min-width: 576px) {
+    .container--mini {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container--mini {
+        max-width: 380px;
+    }
+}
+
+
+
