@@ -19,6 +19,7 @@ from lib.utils.logger_utils import logger
 from views.index import IndexHandler
 from views.log import LoginHandler
 from views.register import RegisterHandler
+from views.sign import SignHandler
 from views.webhook import WebHookHandler
 
 options.define('port', default=8080, type=int)
@@ -26,7 +27,7 @@ options.define('port', default=8080, type=int)
 SETTINGS = dict(
     template_path=os.path.join(os.path.dirname(sys.argv[0]), "templates"),
     static_path=os.path.join(os.path.dirname(sys.argv[0]), "static"),
-    login_url="/",
+    login_url="/signin",
     cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo="
 )
 
@@ -46,6 +47,7 @@ session_settings = dict(
 urls = [
     (r'/', IndexHandler),
     (r'/log(in|out)', LoginHandler),
+    (r'/sign(in|up)', SignHandler),
     (r'/register', RegisterHandler),
     (r'/webhook', WebHookHandler)
 ]

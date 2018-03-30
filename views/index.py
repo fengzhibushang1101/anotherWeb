@@ -11,15 +11,12 @@ from views.base import BaseHandler, authenticated
 
 class IndexHandler(BaseHandler):
 
+    @authenticated
     def get(self, *args, **kwargs):
         user = self.current_user
         render_settings = dict()
-        render_settings["name"] = ""
-        if not user:
-            self.render("index/login.html", **render_settings)
-        else:
-            render_settings["name"] = "UID:%s" % user.id
-            self.render("index/index.html", **render_settings)
+        render_settings["name"] = "UID:%s" % user.id
+        self.render("index/index.html", **render_settings)
 
     @authenticated
     def post(self, *args, **kwargs):

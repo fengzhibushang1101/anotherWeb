@@ -21,9 +21,12 @@
                 </ul>
 
                 <ul class="navbar-nav d-lg-flex order-3">
-                    <li class="nav-item"><a class="nav-link" href="#">Sign in</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Sign up</a>
-                    </li>
+                    {% if name  %}
+                    <li class="nav-item"><a class="nav-link" id="log-out" href="#">Sign out</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="/signin">Sign in</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/signup">Sign up</a></li>
+                    {% end %}
                 </ul>
                 {#            <form class="form-inline mt-2 mt-md-0">#}
                 {#                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">#}

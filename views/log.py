@@ -17,9 +17,6 @@ from views.base import BaseHandler
 
 class LoginHandler(BaseHandler):
 
-    def get(self, *args, **kwargs):
-        self.set_status(404, "invalid Path!")
-
     def post(self, *args, **kwargs):
         option = args[0]
         methods = {
