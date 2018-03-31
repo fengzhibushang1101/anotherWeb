@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Observer 模式</title>
+</head>
+<body>
+<button type="button" id="addNewObserver">添加checkbox</button>
+<!-- subject -->
+<input type="checkbox" id="mainCheckbox">
+<div id="observerContainer"></div>
+
+
+<script src="observer_list.js"></script>
+<script src="subject.js"></script>
+<script src="observer.js"></script>
+
+
+<script>
+    function extend (el, subject) {
+        for (let k in subject) {
+            el[k] = subject[k];
+        }
+    }
+    let controlCheckbox = document.getElementById("mainCheckbox");
+    let addBtn = document.getElementById("addNewObserver");
+    let container = document.getElementById("observerContainer");
+    extend(controlCheckbox, new Subject());
+    controlCheckbox.onclick = function () {
+        this.notify(this.checked);
+    };
+    addBtn.onclick = AddNewObserver;
+    function AddNewObserver () {
+        let check = document.createElement('input');
+        check.type = 'checkbox';
+        extend(check, new Observer());
+        check.update = function (checked) {
+            this.checked = checked;
+        };
+        controlCheckbox.addObserver(check);
+        container.appendChild(check);
+    }
+</script>
+</body>
+</html>

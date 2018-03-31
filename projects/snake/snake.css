@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    position: relative;
+}
+
+
+.cell.snake {
+    background: blue;
+}
+
+.cell.food {
+    background: orange;
+}
+
+
+
+.row {
+    display: flex;
+    flex: 1;
+}
+.cell {
+    flex: 1;
+    height: 100%;
+    border-bottom: 1px solid brown;
+    border-right: 1px solid brown;
+}
+
+#map {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid brown;
+    border-top: 1px solid brown;
+    position: relative;
+    margin: auto;
+}

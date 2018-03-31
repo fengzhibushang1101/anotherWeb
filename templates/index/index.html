@@ -7,7 +7,14 @@
 {% end %}
 
 {% block main %}
-哈哈哈哈哈哈哈哈哈
+<div class="row">
+    {% for i in range(0, 12) %}
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">{{ i }}</div>
+    </div>
+    {% end %}
+</div>
+
 {% end %}
 {% block javascript %}
     <script src="{{ static_url('js/index/index.js') }}" ></script>
