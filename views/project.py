@@ -10,7 +10,9 @@ from views.base import BaseHandler, authenticated
 
 
 class ProjectHandler(BaseHandler):
-
+    """
+    暂时没有意义, 在nginx设置跳转
+    """
     @authenticated
     def get(self, *args, **kwargs):
         print args
