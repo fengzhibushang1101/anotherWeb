@@ -18,6 +18,7 @@ from config import settings
 from lib.utils.logger_utils import logger
 from views.index import IndexHandler
 from views.log import LoginHandler
+from views.project import ProjectHandler
 from views.register import RegisterHandler
 from views.sign import SignHandler
 from views.webhook import WebHookHandler
@@ -49,7 +50,8 @@ urls = [
     (r'/log(in|out)', LoginHandler),
     (r'/sign(in|up)', SignHandler),
     (r'/register', RegisterHandler),
-    (r'/webhook', WebHookHandler)
+    (r'/webhook', WebHookHandler),
+    (r'/project/([\w/\.]+)', ProjectHandler)
 ]
 
 
