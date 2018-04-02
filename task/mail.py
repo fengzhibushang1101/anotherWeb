@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
  @Time    : 2018/3/28 0028 下午 8:55
- @Author  : Administrator
+ @Author  : jyq
  @Software: PyCharm
  @Description: 
 """
@@ -12,6 +12,8 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
+
+from lib.utils.logger_utils import logger
 from task import celery
 
 
@@ -63,8 +65,7 @@ def send_mail(subject,
         smtp.quit()
 
     except Exception, e:
-        print "@@@@@@@@@@@@"
-        print "this time is to send content: %s" % text
-        print traceback.format_exc(e)
+        logger.info("this time is to send content: %s" % text)
+        logger.info(traceback.format_exc(e))
 
 

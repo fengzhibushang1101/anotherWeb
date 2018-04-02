@@ -32,11 +32,23 @@ CELERYD_PREFETCH_MULTIPLIER = 2
 CELERY_QUEUES = (
     Queue('default_queue', Exchange('default_queue'), routing_key='default_queue'),
     Queue('send_mail', Exchange('mail'), routing_key='send.mail', exchange_type="direct"),
+    Queue('fetch_review', Exchange('fetch_review'), routing_key='fetch_joom.fetch_review', exchange_type="direct"),
+    Queue('fetch_cate', Exchange('fetch_cate'), routing_key='fetch_joom.fetch_cate', exchange_type="direct"),
+    Queue('fetch_cate_pro', Exchange('fetch_cate_pro'), routing_key='fetch_joom.fetch_cate_pro', exchange_type="direct"),
+    Queue('fetch_pro', Exchange('fetch_pro'), routing_key='fetch_joom.fetch_pro', exchange_type="direct"),
 )
 
 CELERY_ROUTES = (
     # 发送邮件的队列
     {"task.mail.send_mail": {"routing_key": "send.mail", "queue": "send_mail"}},
+    # 抓取review队列
+    {"task.fetch_review.fetch_review": {"routing_key": "fetch_joom.fetch_review", "queue": "fetch_review"}},
+    # 抓取category队列
+    {"task.fetch_cate.fetch_cate": {"routing_key": "fetch_joom.fetch_cate", "queue": "fetch_cate"}},
+    # 抓取分类产品队列
+    {"task.fetch_cate_pro.fetch_cate_pro": {"routing_key": "fetch_joom.fetch_cate_pro", "queue": "fetch_cate_pro"}},
+    # 抓取产品队列
+    {"task.fetch_pro.fetch_pro": {"routing_key": "fetch_joom.fetch_pro", "queue": "fetch_pro"}},
 )
 #
 # CELERYBEAT_SCHEDULE = {
@@ -44,7 +56,11 @@ CELERY_ROUTES = (
 # }
 #
 CELERY_IMPORTS = (
-    "task.mail"
+    "task.mail",
+    "task.fetch_review",
+    "task.fetch_cate",
+    "task.fetch_cate_pro",
+    "task.fetch_pro"
 )
 
 CELERY_SEND_TASK_ERROR_EMAILS = False
