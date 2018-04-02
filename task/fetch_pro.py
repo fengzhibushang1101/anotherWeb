@@ -7,17 +7,12 @@
  @Description:
 """
 import datetime
-import time
-import traceback
 
 import requests
-from concurrent import futures
 
 from lib.sql2.base import db
 from lib.sql2.joom_pro import JoomPro
-from lib.sql2.joom_review import JoomReview
 from lib.sql2.joom_shop import JoomShop
-from lib.sql2.joom_user import JoomUser
 from lib.utils.logger_utils import logger
 from task import celery
 from task.func import get_joom_token

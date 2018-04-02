@@ -7,28 +7,11 @@
  @Description: 
 """
 
-
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 from lib.sql2.category import Category
 from task.fetch_cate_pro import fetch_cate_pro
 
-"""
- @Time    : 2018/4/2 0002 下午 8:26
- @Author  : jyq
- @Software: PyCharm
- @Description: 
-"""
-import datetime
-import time
-import traceback
-
 import requests
-from concurrent import futures
 
-from lib.sql2.base import db
-from lib.sql2.joom_review import JoomReview
-from lib.sql2.joom_user import JoomUser
 from lib.utils.logger_utils import logger
 from task import celery
 from task.func import get_joom_token

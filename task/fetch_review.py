@@ -11,11 +11,9 @@ import time
 import traceback
 
 import requests
-from concurrent import futures
 from sqlalchemy import text
 
 from lib.sql2.base import db
-from lib.sql2.joom_user import JoomUser
 from lib.utils.logger_utils import logger
 from task import celery
 from task.func import get_joom_token
