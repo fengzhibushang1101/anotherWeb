@@ -10,6 +10,7 @@
 import requests
 from concurrent import futures
 
+from lib.sql2.base import db
 from lib.utils.logger_utils import logger
 from task import celery
 from task.fetch_review import fetch_review
@@ -52,9 +53,10 @@ def fetch_cate_pro(token, cate_id, off=0):
         for item in items:
             logger.info(u'产品id为%s' % item["id"])
             fetch_review.delay(item["id"], token)
+        connect = db.connect()
         with futures.ThreadPoolExecutor(max_workers=16) as executor:
             future_to_user = {
-                executor.submit(fetch_pro, tag=item["id"], token=token): item["id"] for item in items
+                executor.submit(fetch_pro, tag=item["id"], token=token, connect=connect): item["id"] for item in items
             }
             for future in futures.as_completed(future_to_user):
                 rev_pro = future_to_user[future]
@@ -62,6 +64,7 @@ def fetch_cate_pro(token, cate_id, off=0):
                     rp = future.result()
                 except Exception as exc:
                     logger.error("%s generated an exception: %s" % (rev_pro, exc))
+        connect.close()
         fetch_cate_pro.delay(token, cate_id, off+200)
 
 
