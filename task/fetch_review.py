@@ -11,6 +11,7 @@ import time
 import traceback
 
 import requests
+from concurrent import futures
 from sqlalchemy import text
 
 from lib.sql2.base import db
@@ -30,13 +31,19 @@ def upsert_review(session, review):
     except Exception, e:
         pass
 
-
 def upsert_user(session, user):
     logger.info(u"正在插入用户, no为%s" % user["user_no"])
     try:
-        session.excute(JoomUser.__table__.insert(), user)
+        sql = text('insert into joom_user (user_no, full_name, images) values (:user_no, :full_name, :images) on duplicate key update full_name=:full_name, images = :images;')
+        session.execute(sql, **user)
     except Exception, e:
         pass
+# def upsert_user(session, user):
+#     logger.info(u"正在插入用户, no为%s" % user["user_no"])
+#     try:
+#         session.excute(JoomUser.__table__.insert(), user)
+#     except Exception, e:
+#         pass
 
 def retrieve_review(reviews_info):
     try:
@@ -109,30 +116,20 @@ def fetch_review(tag, token, page_token=None):
         with sessionCM() as session:
             if len(review_datas):
                 session.execute(JoomReview.__table__.insert(), review_datas)
-            if len(review_users):
-                session.execute(JoomUser.__table__.insert(), review_users)
+            # if len(review_users):
+            #     session.execute(JoomUser.__table__.insert(), review_users)
             session.commit()
-        # with futures.ThreadPoolExecutor(max_workers=16) as executor:
-        #     future_to_pro = {
-        #         executor.submit(upsert_review, connect=connect, review=rev_pro): rev_pro for rev_pro in review_datas
-        #     }
-        #     for future in futures.as_completed(future_to_pro):
-        #         rev_pro = future_to_pro[future]
-        #         try:
-        #             rp = future.result()
-        #         except Exception as exc:
-        #             logger.error("%s generated an exception: %s" % (rev_pro, exc))
-        # with futures.ThreadPoolExecutor(max_workers=16) as executor:
-        #     future_to_user = {
-        #         executor.submit(upsert_user, connect=connect, user=r_user): r_user for r_user in review_users
-        #     }
-        #     for future in futures.as_completed(future_to_user):
-        #         r_user = future_to_user[future]
-        #         try:
-        #             ru = future.result()
-        #         except Exception as exc:
-        #             logger.error("%s generated an exception: %s" % (r_user, exc))
-
+            with futures.ThreadPoolExecutor(max_workers=16) as executor:
+                future_to_user = {
+                    executor.submit(upsert_user, session=session, user=rev_user): rev_user for rev_user in review_users
+                }
+                for future in futures.as_completed(future_to_user):
+                    rev_pro = future_to_user[future]
+                    try:
+                        rp = future.result()
+                    except Exception as exc:
+                        logger.error("%s generated an exception: %s" % (rev_pro, exc))
+            session.commit()
         if content["payload"].get("nextPageToken") and len(reviews):
             return fetch_review.delay(tag, token, page_token=content["payload"]["nextPageToken"])
     else:
