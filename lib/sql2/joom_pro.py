@@ -89,7 +89,7 @@ class JoomPro(Base):
             category_id = kwargs.get("category_id", "") or ""
             image = kwargs.get("image", "") or ""
             rate = kwargs.get("rate", 0) or 0
-            msrp = kwargs.get("msrp", "") or ""
+            msrp = kwargs.get("msrp", 0) or 0
             discount = kwargs.get("discount", 0) or 0
             real_price = kwargs.get("real_price", 0) or 0
             reviews_count = kwargs.get("reviews_count", 0) or 0
