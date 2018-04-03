@@ -47,7 +47,7 @@ def fetch_cate_pro(token, cate_id, off=0):
     content = json.loads(res.content)
     items = content["payload"]["items"]
     if len(items) == 0:
-        logger.info(u"分类%s抓取完成" % cate_id)
+        logger.info(u"分类%s抓取完成!" % cate_id)
     else:
         for item in items:
             logger.info(u'产品id为%s' % item["id"])
