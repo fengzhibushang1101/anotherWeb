@@ -14,26 +14,27 @@ import requests
 from sqlalchemy import text
 
 from lib.sql2.base import db
+from lib.sql2.joom_review import JoomReview
+from lib.sql2.joom_user import JoomUser
+from lib.sql2.session import sessionCM
 from lib.utils.logger_utils import logger
 from task import celery
 from task.func import get_joom_token
 import ujson as json
 
 
-def upsert_review(connect, review):
+def upsert_review(session, review):
     logger.info(u"正在插入评论, no为%s" % review["review_no"])
     try:
-        sql = text('insert into joom_review (review_no,create_time,update_time,pro_no,variation_id,user_no,joom_review.language,origin_text,new_text,order_id,is_anonymous,colors,star,shop_no,photos) VALUES (:review_no,:create_time,:update_time,:pro_no,:variation_id,:user_no,:language,:origin_text,:new_text,:order_id,:is_anonymous,:colors,:star,:shop_no,:photos) on duplicate key update star=:star;')
-        connect.execute(sql, **review)
+        session.excute(JoomReview.__table__.insert(), review)
     except Exception, e:
         pass
 
 
-def upsert_user(connect, user):
+def upsert_user(session, user):
     logger.info(u"正在插入用户, no为%s" % user["user_no"])
     try:
-        sql = text('insert into joom_user (user_no, full_name, images) values (:user_no, :full_name, :images) on duplicate key update full_name=:full_name, images = :images;')
-        connect.execute(sql, **user)
+        session.excute(JoomUser.__table__.insert(), user)
     except Exception, e:
         pass
 
@@ -105,11 +106,11 @@ def fetch_review(tag, token, page_token=None):
     if content.get("payload"):
         reviews = content["payload"]["items"]
         review_datas, review_users, review_count = retrieve_review(reviews)
-        connect = db.connect()
-        for rev_pro in review_datas:
-            upsert_review(connect, rev_pro)
-        for r_user in review_users:
-            upsert_user(connect, r_user)
+        with sessionCM() as session:
+            for rev_pro in review_datas:
+                upsert_review(session, rev_pro)
+            for r_user in review_users:
+                upsert_user(session, r_user)
         # with futures.ThreadPoolExecutor(max_workers=16) as executor:
         #     future_to_pro = {
         #         executor.submit(upsert_review, connect=connect, review=rev_pro): rev_pro for rev_pro in review_datas
@@ -130,7 +131,7 @@ def fetch_review(tag, token, page_token=None):
         #             ru = future.result()
         #         except Exception as exc:
         #             logger.error("%s generated an exception: %s" % (r_user, exc))
-        connect.close()
+            session.commit()
         if content["payload"].get("nextPageToken") and len(reviews):
             return fetch_review.delay(tag, token, page_token=content["payload"]["nextPageToken"])
     else:
