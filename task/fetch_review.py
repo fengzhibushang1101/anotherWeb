@@ -107,8 +107,8 @@ def fetch_review(tag, token, page_token=None):
         reviews = content["payload"]["items"]
         review_datas, review_users, review_count = retrieve_review(reviews)
         with sessionCM() as session:
-            upsert_review(session, review_datas)
-            upsert_user(session, review_users)
+            session.excute(JoomReview.__table__.insert(), review_datas)
+            session.excute(JoomUser.__table__.insert(), review_users)
             session.commit()
         # with futures.ThreadPoolExecutor(max_workers=16) as executor:
         #     future_to_pro = {
