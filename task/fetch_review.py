@@ -35,7 +35,7 @@ def upsert_user(session, user):
     logger.info(u"正在插入用户, no为%s" % user["user_no"])
     try:
         sql = text('insert into joom_user (user_no, full_name, images) values (:user_no, :full_name, :images) on duplicate key update full_name=:full_name, images = :images;')
-        session.execute(sql, **user)
+        session.execute(sql, user)
     except Exception, e:
         pass
 # def upsert_user(session, user):
