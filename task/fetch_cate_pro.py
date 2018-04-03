@@ -56,7 +56,7 @@ def fetch_cate_pro(token, cate_id, off=0):
             fetch_review.delay(item["id"], token)
         with futures.ThreadPoolExecutor(max_workers=8) as executor:
             future_to_user = {
-                executor.submit(fetch_pro, tag=item["id"], token=token, connect=connect): item["id"] for item in items
+                executor.submit(fetch_pro, tag=item["id"], token=token): item["id"] for item in items
             }
             for future in futures.as_completed(future_to_user):
                 rev_pro = future_to_user[future]
