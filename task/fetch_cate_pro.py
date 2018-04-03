@@ -8,6 +8,7 @@
 """
 
 import requests
+from concurrent import futures
 
 from lib.utils.logger_utils import logger
 from task import celery
@@ -50,8 +51,17 @@ def fetch_cate_pro(token, cate_id, off=0):
     else:
         for item in items:
             logger.info(u'产品id为%s' % item["id"])
-            fetch_pro.delay(item["id"], token)
             fetch_review.delay(item["id"], token)
+        with futures.ThreadPoolExecutor(max_workers=16) as executor:
+            future_to_user = {
+                executor.submit(fetch_pro, tag=item["id"], token=token): item["id"] for item in items
+            }
+            for future in futures.as_completed(future_to_user):
+                rev_pro = future_to_user[future]
+                try:
+                    rp = future.result()
+                except Exception as exc:
+                    logger.error("%s generated an exception: %s" % (rev_pro, exc))
         fetch_cate_pro.delay(token, cate_id, off+50)
 
 
