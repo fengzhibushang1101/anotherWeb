@@ -107,10 +107,8 @@ def fetch_review(tag, token, page_token=None):
         reviews = content["payload"]["items"]
         review_datas, review_users, review_count = retrieve_review(reviews)
         with sessionCM() as session:
-            for rev_pro in review_datas:
-                upsert_review(session, rev_pro)
-            for r_user in review_users:
-                upsert_user(session, r_user)
+            upsert_review(session, review_datas)
+            upsert_user(session, review_users)
             session.commit()
         # with futures.ThreadPoolExecutor(max_workers=16) as executor:
         #     future_to_pro = {
