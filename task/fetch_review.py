@@ -111,6 +111,7 @@ def fetch_review(tag, token, page_token=None):
                 upsert_review(session, rev_pro)
             for r_user in review_users:
                 upsert_user(session, r_user)
+            session.commit()
         # with futures.ThreadPoolExecutor(max_workers=16) as executor:
         #     future_to_pro = {
         #         executor.submit(upsert_review, connect=connect, review=rev_pro): rev_pro for rev_pro in review_datas
@@ -131,7 +132,7 @@ def fetch_review(tag, token, page_token=None):
         #             ru = future.result()
         #         except Exception as exc:
         #             logger.error("%s generated an exception: %s" % (r_user, exc))
-            session.commit()
+
         if content["payload"].get("nextPageToken") and len(reviews):
             return fetch_review.delay(tag, token, page_token=content["payload"]["nextPageToken"])
     else:
