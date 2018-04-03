@@ -24,7 +24,8 @@ import ujson as json
 def upsert_shop(connect, shop):
     try:
         sql = text('insert into joom_shop (joom_shop.name,shop_no,logo,rate,save_count,create_time,update_time,is_verify,pro_count,reviews_count,r_count_30,r_count_7,r_count_7_14,growth_rate,cate_id) values (:name,:shop_no,:logo,:rate,:save_count,:create_time,:update_time,:is_verify,0,0,0,0,0,0,"") on duplicate key update rate=:rate, save_count=:save_count, create_time=:create_time, update_time=:update_time, is_verify=:is_verify;')
-        connect.execute(sql, **shop)
+        cursor = connect.execute(sql, **shop)
+        cursor.close()
     except Exception, e:
         logger.info(traceback.format_exc(e))
 
@@ -32,7 +33,8 @@ def upsert_shop(connect, shop):
 def upsert_pro(connect, pro):
     try:
         sql = text('insert into joom_pro (joom_pro.name,pro_no,shop_no,category_id,image,rate,msrp,discount,real_price,reviews_count,create_time,update_time,cate_id1,cate_id2,cate_id3,cate_id4,cate_id5,origin_price,r_count_30,r_count_7,r_count_7_14,growth_rate,save_count) values (:name,:pro_no,:shop_no,:category_id,:image,:rate,:msrp,:discount,:real_price,:reviews_count,:create_time,:update_time,"","","","","",0,0,0,0,0,0) on duplicate key update joom_pro.name=:name,category_id=:category_id,rate=:rate,msrp=:msrp,discount=:discount,real_price=:real_price,reviews_count=:reviews_count,update_time=:update_time;')
-        connect.execute(sql, **pro)
+        cursor = connect.execute(sql, **pro)
+        cursor.close()
     except Exception, e:
         logger.info(traceback.format_exc(e))
 
