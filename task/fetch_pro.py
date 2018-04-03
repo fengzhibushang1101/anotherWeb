@@ -142,7 +142,7 @@ def trans_pro(res):
 
 
 @celery.task(ignore_result=True)
-def fetch_pro(tag, token, connect):
+def fetch_pro(tag, token):
     data_url = 'https://api.joom.com/1.1/products/%s?language=en-US&currency=USD' % tag
     res = requests.get(data_url, headers={"authorization": token})
     if "unauthorized" in res.content:
@@ -150,8 +150,10 @@ def fetch_pro(tag, token, connect):
         fetch_pro.delay(tag, token)
         return
     content = json.loads(res.content)
+    connect = db.connect()
     pro_data, shop_info, pro_info = trans_pro(content)
     upsert_shop(connect, shop_info)
     upsert_pro(connect, pro_info)
+    connect.close()
     logger.info(u"产品%s保存成功!" % tag)
 
