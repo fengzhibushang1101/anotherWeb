@@ -65,7 +65,6 @@ def fetch_cate_pro(token, cate_id, off=0):
                         rp = future.result()
                     except Exception as exc:
                         logger.error("%s generated an exception: %s" % (rev_pro, exc))
-            session.commit()
         fetch_cate_pro.delay(token, cate_id, off+100)
 
 

@@ -143,3 +143,5 @@ def fetch_pro(tag, token, session):
     upsert_shop(session, shop_info)
     upsert_pro(session, pro_info)
     logger.info(u"产品%s保存成功!" % tag)
+    session.commit()
+
