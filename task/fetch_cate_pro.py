@@ -24,7 +24,7 @@ import ujson as json
 def fetch_cate_pro(token, cate_id, off=0):
     url = 'https://api.joom.com/1.1/search/products?language=en-US&currency=USD'
     params = {
-        'count': 100,
+        'count': 50,
         'pageToken': 'off:%s' % off,
         'filters': [{
             'id': 'categoryId',
@@ -36,7 +36,7 @@ def fetch_cate_pro(token, cate_id, off=0):
             }
         }]
     }
-    logger.info(u"正在抓取分类%s下第%s-%s个产品" % (cate_id, off, off + 100))
+    logger.info(u"正在抓取分类%s下第%s-%s个产品" % (cate_id, off, off + 50))
     res = requests.post(url, data=json.dumps(params), headers={
         "authorization": token,
         "content-type": 'application/json'
@@ -66,6 +66,6 @@ def fetch_cate_pro(token, cate_id, off=0):
                 except Exception as exc:
                     logger.error("%s generated an exception: %s" % (rev_pro, exc))
         connect.close()
-        fetch_cate_pro.delay(token, cate_id, off+100)
+        fetch_cate_pro.delay(token, cate_id, off+50)
 
 
