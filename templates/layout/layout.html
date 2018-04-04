@@ -30,6 +30,15 @@
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="{{ static_url('js/layout/layout.js') }}"></script>
+    <script>
+        var evtSource = new EventSource('http://localhost:9111/es');
+        evtSource.onmessage = function (e) {
+            console.log(e.data);
+        };
+        evtSource.onerror = function (e) {
+            console.log(e);
+        }
+    </script>
     {% block javascript %}
     {% end %}
 </body>
