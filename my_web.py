@@ -16,12 +16,14 @@ from tornado import ioloop, web, options, httpserver
 
 from config import settings
 from lib.utils.logger_utils import logger
+from views.es import EsHandler
 from views.index import IndexHandler
 from views.log import LoginHandler
 from views.project import ProjectHandler
 from views.register import RegisterHandler
 from views.sign import SignHandler
 from views.webhook import WebHookHandler
+from views.ws import WsHandler
 
 options.define('port', default=8080, type=int)
 
@@ -51,7 +53,9 @@ urls = [
     (r'/sign(in|up)', SignHandler),
     (r'/register', RegisterHandler),
     (r'/webhook', WebHookHandler),
-    (r'/project/([\w/\.]+)', ProjectHandler)
+    (r'/project/([\w/\.]+)', ProjectHandler),
+    (r'/es', EsHandler),
+    (r'/ws', WsHandler)
 ]
 
 

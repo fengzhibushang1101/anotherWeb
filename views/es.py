@@ -13,7 +13,9 @@ class EsHandler(BaseHandler):
 
 
     def get(self, *args, **kwargs):
-        pass
+        self.set_header("Content-Type", "text/event-stream")
+        self.flush("111111111111111111")
+        self.finish()
 
     def post(self, *args, **kwargs):
         pass
