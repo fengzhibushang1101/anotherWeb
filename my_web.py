@@ -32,7 +32,8 @@ SETTINGS = dict(
     template_path=os.path.join(os.path.dirname(sys.argv[0]), "templates"),
     static_path=os.path.join(os.path.dirname(sys.argv[0]), "static"),
     login_url="/signin",
-    cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo="
+    cookie_secret="61oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
+    websocket_ping_interval=20
 )
 
 session_settings = dict(

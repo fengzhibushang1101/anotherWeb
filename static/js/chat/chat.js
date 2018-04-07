@@ -11,7 +11,7 @@ $(function () {
     ws.onclose = function(ev) {
         console.log(ev);
         writeMessage({
-            type: 'self',
+            type: 'sys',
             message: "链接断开, 请刷新页面重新链接"
         })
     };

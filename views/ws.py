@@ -36,6 +36,12 @@ class WsHandler(WebSocketHandler, Observer, BaseHandler):
     def on_close(self):
         chat_home.remove(self)
 
+    def on_ping(self, data):
+        print "receive a ping"
+
+    def on_pong(self, data):
+        print "receive a response of my ping"
+
     def on_message(self, message):
         chat_home.notify({"from": self.info["u_id"], "message": message, "name": self.info["name"]})
 
