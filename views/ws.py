@@ -44,7 +44,7 @@ class WsHandler(WebSocketHandler, Observer, BaseHandler):
         trans_mess = dict(
             message=mess["message"],
             name=mess.get("name"),
-            time=datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+            time=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         )
         if u_id == self.info['u_id']:
             trans_mess["type"] = "self"
