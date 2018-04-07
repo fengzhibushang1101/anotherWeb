@@ -1,5 +1,5 @@
 $(function () {
-    var ws = new WebSocket("ws://localhost/ws");
+    var ws = new WebSocket("ws://{0}/ws".format(location.host));
     ws.onopen = function () {
         ws.send("hello!");
     };
