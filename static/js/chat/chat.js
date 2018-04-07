@@ -1,0 +1,26 @@
+$(function () {
+    var ws = new WebSocket("ws://localhost/ws");
+    ws.onopen = function () {
+        ws.send("hello!");
+    };
+    ws.onmessage = function (evt) {
+        var data = JSON.parse(evt.data);
+        if (data["type"] === "sys") {
+            $('#chat-content').append("<p style='width: 100%; text-align:center;'><span class='sys-mess'>" + data['message'] + "</span></p>");
+        } else if (data["type"] === "self") {
+             $('#chat-content').append("<p class='other-mess'>" + data['name'] + ": <br>" +"<span style='color: blue'>" + data['message'] + "</span>" + "</p>");
+        } else {
+             $('#chat-content').append("<p class='my-mess'>" + data['name'] + ": <br>" +"<span style='color: red'>" + data['message'] + "</span>" + "</p>");
+        }
+
+    };
+
+    $("#send-message").click(function() {
+        var content = $("#chat-text"),
+            text = content.val().trim();
+        if(text) {
+            ws.send(text);
+            content.val('');
+        }
+    })
+});

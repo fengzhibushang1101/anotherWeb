@@ -1,0 +1,30 @@
+{% extends "../layout/layout.html" %}
+{% block css %}
+<link href="{{ static_url("css/index/login.css") }}" rel="stylesheet">
+<link href="{{ static_url("css/chat/chat.css") }}" rel="stylesheet">
+{% end %}
+{% block title %}
+<title>首页</title>
+{% end %}
+
+{% block main %}
+<div class="row">
+    <div class="col-md-12">
+        <div id="chat-content" style="padding:10px;border: 1px solid #888; min-height: 700px;"></div>
+    </div>
+    <div class="col-md-10">
+        <textarea name="chat_text" class="form-control" id="chat-text"></textarea>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-success" id="send-message">发送</button>
+    </div>
+</div>
+<script>
+
+
+</script>
+
+{% end %}
+{% block javascript %}
+<script src="{{ static_url('js/chat/chat.js') }}"></script>
+{% end %}

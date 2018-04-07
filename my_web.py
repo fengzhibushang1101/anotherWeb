@@ -16,6 +16,7 @@ from tornado import ioloop, web, options, httpserver
 
 from config import settings
 from lib.utils.logger_utils import logger
+from views.chat import ChatHandler
 from views.es import EsHandler
 from views.index import IndexHandler
 from views.log import LoginHandler
@@ -55,7 +56,8 @@ urls = [
     (r'/webhook', WebHookHandler),
     (r'/project/([\w/\.]+)', ProjectHandler),
     (r'/es', EsHandler),
-    (r'/ws', WsHandler)
+    (r'/ws', WsHandler),
+    (r'/chat((/?)|(/([\w/\.]+)))?', ChatHandler)
 ]
 
 
