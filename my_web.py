@@ -18,6 +18,7 @@ from config import settings
 from lib.utils.logger_utils import logger
 from views.chat import ChatHandler
 from views.es import EsHandler
+from views.gif import GifHandler
 from views.index import IndexHandler
 from views.log import LoginHandler
 from views.project import ProjectHandler
@@ -58,7 +59,8 @@ urls = [
     (r'/project/([\w/\.]+)', ProjectHandler),
     (r'/es', EsHandler),
     (r'/ws', WsHandler),
-    (r'/chat((/?)|(/([\w/\.]+)))?', ChatHandler)
+    (r'/chat((/?)|(/([\w/\.]+)))?', ChatHandler),
+    (r'/gif/([\w/\.]+)', GifHandler)
 ]
 
 
