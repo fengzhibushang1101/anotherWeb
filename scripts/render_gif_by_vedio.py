@@ -32,7 +32,7 @@ def render_gif(template_name, sentences):
 def ass_text(template_name):
     with open("static/video/%s/template.tpl" % template_name) as fp:
         content = fp.read()
-    return content.decode("utf-8")
+    return content.encode("utf-8")
 
 
 def render_ass(template_name, sentences, filename):
@@ -48,13 +48,10 @@ def make_gif_with_ffmpeg(template_name, sentences, filename):
     ass_path = render_ass(template_name, sentences, filename)
     gif_path = "static/cache/gif/" + filename
     video_path = "static/video/" + template_name + "/template.mp4"
-    print(ass_path, gif_path, video_path)
     cmd = "ffmpeg -i {video_path} -r 8 -vf ass={ass_path},scale=300:-1 -y {gif_path}" \
         .format(video_path=video_path, ass_path=ass_path, gif_path=gif_path)
-    print(cmd)
     p = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
     p.wait()
-    print p.stderr.read()
     if p.returncode != 0:
         print("Error.")
         return -1

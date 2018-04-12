@@ -10,8 +10,8 @@ PlayResX: 570
 PlayResY: 320
 
 [Aegisub Project Garbage]
-Audio File: /home/xuty/codehouse/Project/Sorry/resource/sorry.mp4
-Video File: /home/xuty/codehouse/Project/Sorry/resource/sorry.mp4
+Audio File: template.mp4
+Video File: template.mp4
 Video AR Mode: 4
 Video AR Value: 1.781250
 Video Zoom Percent: 1.500000
