@@ -32,8 +32,8 @@ class GifHandler(BaseHandler):
             names = GifList.get_names(session)
             if not gif_info:
                 raise HTTPError(404)
-            render_settings["name"] = name
-            render_settings["names"] = names
+            render_settings["gif_name"] = name
+            render_settings["gif_names"] = names
             render_settings["length"] = gif_info.length
         self.render("gif/sorry.html", **render_settings)
 

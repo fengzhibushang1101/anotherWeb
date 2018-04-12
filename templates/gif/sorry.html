@@ -12,20 +12,20 @@
     <div class="container">
         <div class="row mb-3">
             <div class="col-md-6 offset-md-3">
-                <img class="d-md-block img-fluid mx-auto" src="{{ static_url("video/%s/example.png" % name) }}">
+                <img class="d-md-block img-fluid mx-auto" src="{{ static_url("video/%s/example.png" % gif_name) }}">
             </div>
         </div>
         <div class="row">
             <div class="col-md-3">
                 <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                    {% for n in names %}
-                    <a class="nav-link {% if n == name %}active{% end %}" href="/gif/{{ n }}">{{ n }}</a>
+                    {% for n in gif_names %}
+                    <a class="nav-link {% if n == gif_name %}active{% end %}" href="/gif/{{ n }}">{{ n }}</a>
                     {% end %}
                 </div>
             </div>
             <div class="col-md-6">
                 <form class="form-horizontal" role="form">
-                    {% for i in range(1, length+1) %}
+                    {% for i in range(1, length + 1) %}
                     <div class="form-group row">
                         <div class="col-md-4 col-form-label align-center">请输入第{{ i }}句话</div>
                         <div class="col-md-8">
