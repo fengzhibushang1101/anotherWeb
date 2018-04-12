@@ -21,6 +21,14 @@ class tBase(object):
     create_date = SA.Column(SA.DateTime, default=datetime.datetime.now)
     modified_date = SA.Column(SA.DateTime, default=datetime.datetime.now, onupdate=SA.text("current_timestamp"))
 
+    @classmethod
+    def create(cls, session, **kwargs):
+        info = cls()
+        for k, v in kwargs.iteritems():
+            setattr(info, k, v)
+        session.add(info)
+        session.commit()
+
 
 machine_no = None
 

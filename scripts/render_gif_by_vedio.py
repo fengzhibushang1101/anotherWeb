@@ -32,7 +32,7 @@ def render_gif(template_name, sentences):
 def ass_text(template_name):
     with open("static/video/%s/template.tpl" % template_name) as fp:
         content = fp.read()
-    return content.encode('utf-8')
+    return content.decode("utf-8")
 
 
 def render_ass(template_name, sentences, filename):

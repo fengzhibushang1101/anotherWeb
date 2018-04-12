@@ -12,19 +12,29 @@ from concurrent.futures import ThreadPoolExecutor
 from tornado import gen
 from tornado.concurrent import run_on_executor
 
+from lib.sql.gif_list import GifList
+from lib.sql.session import sessionCM
 from lib.utils.logger_utils import logger
 from scripts.render_gif_by_vedio import render_gif
 from views.base import BaseHandler
 import ujson as json
+from tornado.web import HTTPError
 
 
 class GifHandler(BaseHandler):
     executor = ThreadPoolExecutor(10)
 
-    @gen.coroutine
     def get(self, *args, **kwargs):
-        pass
-
+        name = args[0]
+        render_settings = self.gen_render_settings()
+        with sessionCM() as session:
+            gif_info = GifList.find_by_name(session, name)
+            print
+            if not gif_info:
+                raise HTTPError(404)
+            render_settings["name"] = name
+            render_settings["length"] = gif_info.length
+        self.render("gif/sorry.html", **render_settings)
 
     @gen.coroutine
     def post(self, *args, **kwargs):
@@ -48,4 +58,4 @@ class GifHandler(BaseHandler):
         sentences = self.params.get("sentences")
         sentences = json.loads(sentences)
         path = render_gif(gif_name, sentences)
-        return {"status": 0, "path": path}
+        return {"status": 1, "path": path}

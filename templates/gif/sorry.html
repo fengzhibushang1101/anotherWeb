@@ -1,0 +1,42 @@
+{% extends "../layout/layout.html" %}
+{% block css %}
+<link href="{{ static_url("css/index/login.css") }}" rel="stylesheet">
+<link href="{{ static_url("css/chat/chat.css") }}" rel="stylesheet">
+{% end %}
+{% block title %}
+<title>首页</title>
+{% end %}
+
+{% block main %}
+<section class="section">
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-6 offset-md-3">
+                <img class="d-md-block img-fluid mx-auto" src="{{ static_url("video/%s/example.png" % name) }}">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form class="form-horizontal" role="form">
+                    {% for i in range(1, length+1) %}
+                    <div class="form-group row">
+                        <div class="col-md-4 col-form-label align-center">请输入第{{ i }}句话</div>
+                        <div class="col-md-8">
+                            <input class="form-control sentence" type="text">
+                        </div>
+                    </div>
+                    {% end %}
+                    <div class="text-center">
+                        <button type="button" class="btn btn-success" id="begin-generate">开始生成</button>
+                        <a class="btn btn-primary" id="dl-link" href=""  style="display: none">点击下载</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% end %}
+{% block javascript %}
+<script src="{{ static_url('js/git/sorry.js') }}"></script>
+{% end %}
