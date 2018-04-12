@@ -16,7 +16,14 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 offset-md-3">
+            <div class="col-md-3">
+                <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                    {% for n in names %}
+                    <a class="nav-link {% if n == name %}active{% end %}" href="/gif/{{ n }}">{{ n }}</a>
+                    {% end %}
+                </div>
+            </div>
+            <div class="col-md-6">
                 <form class="form-horizontal" role="form">
                     {% for i in range(1, length+1) %}
                     <div class="form-group row">
@@ -28,7 +35,7 @@
                     {% end %}
                     <div class="text-center">
                         <button type="button" class="btn btn-success" id="begin-generate">开始生成</button>
-                        <a class="btn btn-primary" id="dl-link" href=""  style="display: none">点击下载</a>
+                        <a class="btn btn-primary" id="dl-link" href="" style="display: none">点击下载</a>
                     </div>
                 </form>
             </div>

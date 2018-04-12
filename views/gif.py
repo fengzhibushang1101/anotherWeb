@@ -29,10 +29,11 @@ class GifHandler(BaseHandler):
         render_settings = self.gen_render_settings()
         with sessionCM() as session:
             gif_info = GifList.find_by_name(session, name)
-            print
+            names = GifList.get_names(session)
             if not gif_info:
                 raise HTTPError(404)
             render_settings["name"] = name
+            render_settings["names"] = names
             render_settings["length"] = gif_info.length
         self.render("gif/sorry.html", **render_settings)
 

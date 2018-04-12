@@ -25,6 +25,9 @@ class GifList(Base):
     def find_by_name(cls, session, name):
         return session.query(cls).filter(cls.name == name).first()
 
+    @classmethod
+    def get_names(cls, session):
+        return [info.name for info in session.query(cls.name).all()]
 
 
 if __name__ == "__main__":
