@@ -12,6 +12,7 @@ import ujson as json
 from concurrent.futures import ThreadPoolExecutor
 from tornado import gen
 from tornado.concurrent import run_on_executor
+from tornado.web import HTTPError
 
 from lib.controls.jx3info import Jx3Info
 from lib.utils.logger_utils import logger
@@ -30,6 +31,8 @@ class ApiHandler(BaseHandler):
             method_settings = {
                 "jx3/info": self.get_jx3info
             }
+            if interface not in method_settings:
+                raise HTTPError(404)
             response = yield method_settings[interface]()
             self.write(response)
             self.finish()
