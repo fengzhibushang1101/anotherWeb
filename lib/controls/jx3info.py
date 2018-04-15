@@ -61,6 +61,7 @@ class Jx3Info(object):
                     current_jx3_info = json.dumps(cls.get_info())
                     Jx3DailyRecord.create(session, update_time=time, info=current_jx3_info)
                     send_to_master("剑网三自动更新完成", current_jx3_info)
+                    return True
                 except WatchError:
                     pipe.reset()
 
