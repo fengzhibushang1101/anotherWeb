@@ -58,7 +58,9 @@ class Jx3Info(object):
                     time = Timer.now_time()
                     redis.set(cls.TIME_KEY, Timer.now_time())
                     pipe.execute()
-                    Jx3DailyRecord.create(session, update_time=time, info=json.dumps(cls.get_info()))
+                    current_jx3_info = json.dumps(cls.get_info())
+                    Jx3DailyRecord.create(session, update_time=time, info=current_jx3_info)
+                    send_to_master("剑网三自动更新完成", current_jx3_info)
                 except WatchError:
                     pipe.reset()
 
