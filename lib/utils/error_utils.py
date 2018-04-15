@@ -20,6 +20,10 @@ class ErrorArgumentError(Exception):
     msg = "some arguments of supported is wrong"
 
 
+class RedisError(Exception):
+    msg = "there is something wrong about redis"
+
+
 __all__ = [
-    NullArgumentException, MissArgumentError, ErrorArgumentError
+    NullArgumentException, MissArgumentError, ErrorArgumentError, RedisError
 ]

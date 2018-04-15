@@ -30,3 +30,6 @@ REDIS_PORT = 6379
 REDIS_DB = 0
 REDIS_PASSWORD = ""
 REDIS_MAX_CONNECTIONS = 1024
+
+# master's emails
+MASTER_EMAIL = ["fengzhibushang@163.com"]

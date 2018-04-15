@@ -7,10 +7,12 @@
  @Description: 
 """
 import traceback
-
+import ujson as json
 from tornado import gen
 
+from lib.controls.jx3info import Jx3Info
 from lib.utils.logger_utils import logger
+from task.mail import send_to_master
 from views.base import BaseHandler
 
 
@@ -22,19 +24,39 @@ class ApiHandler(BaseHandler):
         try:
             interface = args[0]
             method_settings = {
-                "jx3info": self.get_jx3info
+                "jx3/info": self.get_jx3info
             }
             response = yield method_settings[interface]()
             self.write(response)
             self.finish()
-
         except Exception, e:
             logger_dict["traceback"] = traceback.format_exc(e)
             logger.error(logger_dict)
+            send_to_master("API出错", json.dumps(logger_dict))
             self.write({"status": 0, "message": "获取失败"})
 
+    @gen.coroutine
+    def post(self, *args, **kwargs):
+        logger_dict = {"args": args, "kwargs": kwargs, "params": self.params, "method": "POST"}
+        try:
+            interface = args[0]
+            method_settings = {
+                "jx3/info": self.update_jx3_info
+            }
+            response = yield method_settings[interface]()
+            self.write(response)
+            self.finish()
+        except Exception, e:
+            logger_dict["traceback"] = traceback.format_exc(e)
+            logger.error(logger_dict)
+            send_to_master("API出错", json.dumps(logger_dict))
+            self.write({"status": 0, "message": "获取失败"})
 
     def get_jx3info(self):
-        pass
+        return {"status": 1, "info": Jx3Info.get_info()}
 
+    def update_jx3_info(self):
+        res = Jx3Info.auto_add_one()
+        if res:
+            return {"status": 1, "message": "更新成功"}
 

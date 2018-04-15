@@ -39,6 +39,9 @@ class RedisUtil(object):
         if self.find_key(key):
             return self.conn.delete(key)
 
+    def incr(self, key, amount=1):
+        return self.conn.incr(key, amount)
+
     def set_expiration(self, name, expiration):
         return self.conn.expire(name, expiration)
 
