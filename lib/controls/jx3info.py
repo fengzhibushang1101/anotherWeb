@@ -6,9 +6,12 @@
  @Software: PyCharm
  @Description: 
 """
+import ujson as json
 from redis import RedisError, WatchError
 
 from lib.nosql.redis_util import redis_conn as redis
+from lib.sql.jx3_daily_record import Jx3DailyRecord
+from lib.sql.session import sessionCM
 from lib.utils.time_utils import Timer
 from task.mail import send_to_master
 
@@ -26,14 +29,17 @@ class Jx3Info(object):
     @classmethod
     def set_info(cls, value):
         with redis.conn.pipeline() as pipe:
-            try:
-                pipe.watch(cls.REDIS_KEY, cls.TIME_KEY)
-                pipe.multi()
-                redis.set(cls.REDIS_KEY, value)
-                redis.set(cls.TIME_KEY, Timer.now_time())
-                pipe.execute()
-            except WatchError:
-                pipe.reset()
+            with sessionCM() as session:
+                try:
+                    pipe.watch(cls.REDIS_KEY, cls.TIME_KEY)
+                    pipe.multi()
+                    redis.set(cls.REDIS_KEY, value)
+                    time = Timer.now_time()
+                    redis.set(cls.TIME_KEY, time)
+                    pipe.execute()
+                    Jx3DailyRecord.create(session, update_time=time, info=json.dumps(cls.get_info()))
+                except WatchError:
+                    pipe.reset()
 
     @classmethod
     def auto_add_one(cls):
@@ -42,16 +48,19 @@ class Jx3Info(object):
             send_to_master("剑网三自动更新出错", "上次更新时间错误!")
             return False
         with redis.conn.pipeline() as pipe:
-            try:
-                pipe.watch(cls.REDIS_KEY, cls.TIME_KEY)
-                pipe.multi()
-                res = redis.incr(cls.REDIS_KEY)
-                if not res:
-                    raise RedisError
-                redis.set(cls.TIME_KEY, Timer.now_time())
-                pipe.execute()
-            except WatchError:
-                pipe.reset()
+            with sessionCM() as session:
+                try:
+                    pipe.watch(cls.REDIS_KEY, cls.TIME_KEY)
+                    pipe.multi()
+                    res = redis.incr(cls.REDIS_KEY)
+                    if not res:
+                        raise RedisError
+                    time = Timer.now_time()
+                    redis.set(cls.TIME_KEY, Timer.now_time())
+                    pipe.execute()
+                    Jx3DailyRecord.create(session, update_time=time, info=json.dumps(cls.get_info()))
+                except WatchError:
+                    pipe.reset()
 
 
 if __name__ == "__main__":

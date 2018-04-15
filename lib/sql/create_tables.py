@@ -10,6 +10,7 @@
 from lib.sql.base import metadata, db
 from lib.sql.user import User
 from lib.sql.gif_list import GifList
+from lib.sql.jx3_daily_record import Jx3DailyRecord
 
 
 class CreateTables(object):
