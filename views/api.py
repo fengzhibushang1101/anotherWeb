@@ -26,21 +26,22 @@ class ApiHandler(BaseHandler):
     @gen.coroutine
     def get(self, *args, **kwargs):
         logger_dict = {"args": args, "kwargs": kwargs, "params": self.params, "method": "POST"}
+        interface = args[0]
+        method_settings = {
+            "jx3/info": self.get_jx3info
+        }
+        if interface not in method_settings:
+            raise HTTPError(404)
         try:
-            interface = args[0]
-            method_settings = {
-                "jx3/info": self.get_jx3info
-            }
-            if interface not in method_settings:
-                raise HTTPError(404)
             response = yield method_settings[interface]()
             self.write(response)
-            self.finish()
         except Exception, e:
             logger_dict["traceback"] = traceback.format_exc(e)
             logger.error(logger_dict)
             send_to_master("API出错", json.dumps(logger_dict))
             self.write({"status": 0, "message": "获取失败"})
+        finally:
+            self.finish()
 
     @gen.coroutine
     def post(self, *args, **kwargs):
