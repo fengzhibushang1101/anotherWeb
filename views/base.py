@@ -36,6 +36,10 @@ class BaseHandler(SessionBaseHandler):
     def cookies(self):
         return self._cookies()
 
+    @property
+    def headers(self):
+        return self._headers
+
     def _argument(self):
         return self._flatten_arguments(self.request.arguments)
 
