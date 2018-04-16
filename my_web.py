@@ -16,6 +16,7 @@ from tornado import ioloop, web, options, httpserver
 
 from config import settings
 from lib.utils.logger_utils import logger
+from views.api import ApiHandler
 from views.chat import ChatHandler
 from views.es import EsHandler
 from views.gif import GifHandler
@@ -57,6 +58,7 @@ urls = [
     (r'/register', RegisterHandler),
     (r'/webhook', WebHookHandler),
     (r'/project/([\w/\.]+)', ProjectHandler),
+    (r'/api/([\w/\.]+)', ApiHandler),
     (r'/es', EsHandler),
     (r'/ws', WsHandler),
     (r'/chat((/?)|(/([\w/\.]+)))?', ChatHandler),

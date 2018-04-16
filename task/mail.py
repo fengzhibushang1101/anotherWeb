@@ -13,6 +13,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE, formatdate
 
+from config import settings
 from lib.utils.logger_utils import logger
 from task import celery
 
@@ -69,3 +70,5 @@ def send_mail(subject,
         logger.info(traceback.format_exc(e))
 
 
+def send_to_master(title, content):
+    send_mail.delay(title, content, to=settings.master_email)
