@@ -19,6 +19,9 @@ class WebHookHandler(BaseHandler):
         body = self.params
         send_body = ["网站更新成功!", "头部: %s" % json.dumps(headers), "body: %s" % json.dumps(body)]
         cwd = "/root/src/anotherWeb"
-        subprocess.Popen("git pull origin master; supervisorctl restart all; echo '更新成功!!!'", cwd=cwd, shell=True)
+        myweb_ports = [9331, 9332, 9333, 9334]
+        restart_command = ';'.join(map(lambda x: "supervisorctl restart server-%s" % x, myweb_ports))
+        subprocess.Popen("git pull origin master; " + restart_command, cwd=cwd, shell=True)
+
         send_mail.delay("更新通知", '\n'.join(send_body), to=["fengzhibushang@163.com"])
 
