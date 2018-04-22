@@ -7,7 +7,6 @@
  @Description: 
 """
 
-
 import os.path
 import traceback
 
@@ -48,6 +47,7 @@ session_settings = dict(
         max_connections=settings.redis_max_connections
     ),
     cookie_config=dict(
+        domain=".kisu.top",
         expires_days=30,
     )
 )
