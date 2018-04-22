@@ -12,7 +12,7 @@
 # log configure
 import os
 
-LOG_PATH = '/logs/myweb/'
+LOG_PATH = '/home/odin/log/myweb/'
 LOG_FILE = os.path.sep.join([LOG_PATH, 'myweb.log'])
 DEFAULT_LOG_SIZE = 1024*1024*50
 
