@@ -7,6 +7,8 @@
  @Description: 
 """
 import redis
+from tornadoredis import Client
+
 from config import settings
 import ujson as json
 
@@ -90,7 +92,19 @@ class RedisUtil(object):
             yield item_lst
 
 
+def get_toredis_client():
+    redis_client = Client(
+            host=settings.redis_host,
+            port=settings.redis_port,
+            selected_db=settings.redis_db,
+            password=settings.redis_password)
+    redis_client.connect()
+    return redis_client
+
 redis_conn = RedisUtil()
+
+
+
 
 if __name__ == "__main__":
     res = redis_conn.sadd("test_scan", *range(1500))

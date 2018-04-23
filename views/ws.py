@@ -11,10 +11,10 @@ from uuid import uuid4
 import datetime
 import ujson as json
 from tornado import gen, web
-from tornadoredis import Client
 from tornado.websocket import WebSocketHandler, WebSocketClosedError
 
 from lib.controls.chat_home import ChatHome, CHAT_CHANNEL
+from lib.nosql.redis_util import get_toredis_client
 from views.base import BaseHandler
 
 chat_home = ChatHome()
@@ -24,13 +24,9 @@ class WsHandler(WebSocketHandler, BaseHandler):
 
     def __init__(self, application, request, **kwargs):
         super(WsHandler, self).__init__(application, request, **kwargs)
-        self.info = {"female": "default", "name": self.current_user.name or self.current_user.mobile, 'u_id': str(uuid4())}
-        self.client = None
-
-    def _connect_to_redis(self):
-        redis_client = Client()
-        redis_client.connect()
-        return redis_client
+        self.info = {"female": "default", "name": self.current_user.name or self.current_user.mobile,
+                     'u_id': str(uuid4())}
+        self.client = get_toredis_client()
 
     def check_origin(self, origin):
         # parsed_origin = urllib.parse.urlparse(origin)
@@ -40,7 +36,6 @@ class WsHandler(WebSocketHandler, BaseHandler):
     @web.asynchronous
     @gen.engine
     def open(self, *args, **kwargs):
-        self.client = self._connect_to_redis()
         yield gen.Task(self.client.subscribe, [CHAT_CHANNEL])
         self.client.listen(self.on_receive)
         chat_home.add(self)
@@ -67,6 +62,7 @@ class WsHandler(WebSocketHandler, BaseHandler):
             chat_home.remove(self)
 
     def on_close(self):
+        self.client.disconnect()
         chat_home.remove(self)
 
     def on_ping(self, data):

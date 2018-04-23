@@ -6,9 +6,8 @@
  @Software: PyCharm
  @Description: 
 """
-from tornadoredis import Client
 import ujson as json
-from lib.nosql.redis_util import redis_conn
+from lib.nosql.redis_util import redis_conn, get_toredis_client
 
 CHAT_CHANNEL = "CHAT"
 
@@ -16,12 +15,7 @@ class ChatHome(object):
 
     def __init__(self):
         self.registers = set()
-        self.client = self.get_client()
-
-    def get_client(self):
-        redis_client = Client()
-        redis_client.connect()
-        return redis_client
+        self.client = get_toredis_client()
 
     def add(self, register):
         self.registers.add(register)
