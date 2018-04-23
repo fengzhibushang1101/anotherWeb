@@ -6,13 +6,22 @@
  @Software: PyCharm
  @Description: 
 """
-from lib.models.subject import Subject
+from tornadoredis import Client
+import ujson as json
+from lib.nosql.redis_util import redis_conn
 
+CHAT_CHANNEL = "CHAT"
 
-class ChatHome(Subject):
+class ChatHome(object):
 
     def __init__(self):
         self.registers = set()
+        self.client = self.get_client()
+
+    def get_client(self):
+        redis_client = Client()
+        redis_client.connect()
+        return redis_client
 
     def add(self, register):
         self.registers.add(register)
@@ -35,5 +44,6 @@ class ChatHome(Subject):
         return len(self.registers)
 
     def notify(self, mess):
-        for register in self.registers:
-            register.update(mess)
+        self.client.publish(CHAT_CHANNEL, json.dumps(mess))
+        # for register in self.registers:
+        #     register.update(mess)

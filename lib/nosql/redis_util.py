@@ -57,6 +57,49 @@ class RedisUtil(object):
         value = json.dumps(value)
         self.set(key, value)
 
+    def publish(self, channel, msg):
+        self.conn.publish(channel, msg)
+        return True
+
+    def get_sub(self, channel):
+        pub = self.conn.pubsub()
+        pub.subscribe(channel)
+        return pub
+
+    def sadd(self, name, *key):
+        try:
+            return self.conn.sadd(name, *key)
+        except Exception, e:
+            print e
+            return None
+
+    def delete(self, name):
+        return self.conn.delete(name)
+
+    def sscan_iter(self, name, match=None, count=100, batch=500):
+        cursor = '0'
+        while cursor != 0:
+            item_lst = []
+            for i in xrange(count):
+                cursor, data = self.conn.sscan(name, cursor=cursor,
+                                      match=match, count=batch)
+                if data:
+                    item_lst.append(data)
+                if cursor == 0:
+                    break
+            yield item_lst
+
+
+redis_conn = RedisUtil()
+
+if __name__ == "__main__":
+    res = redis_conn.sadd("test_scan", *range(1500))
+    print res
+    # print redis_conn.get("a")
+    c = redis_conn.sscan_iter("test_scan", batch=50, count=3)
+    for d in c:
+        print len(d)
+        print d
 
 redis_conn = RedisUtil()
 
