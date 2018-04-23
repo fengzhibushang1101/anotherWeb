@@ -15,6 +15,7 @@ from tornado.websocket import WebSocketHandler, WebSocketClosedError
 
 from lib.controls.chat_home import ChatHome, CHAT_CHANNEL
 from lib.nosql.redis_util import get_toredis_client
+from lib.utils.logger_utils import logger
 from views.base import BaseHandler
 
 chat_home = ChatHome()
@@ -65,11 +66,8 @@ class WsHandler(WebSocketHandler, BaseHandler):
         self.client.disconnect()
         chat_home.remove(self)
 
-    def on_ping(self, data):
-        print "receive a ping"
-
     def on_pong(self, data):
-        print "receive a response of my ping"
+        logger.info("receive a response of my ping")
 
     def on_message(self, message):
         chat_home.notify({"from": self.info["u_id"], "message": message, "name": self.info["name"]})
