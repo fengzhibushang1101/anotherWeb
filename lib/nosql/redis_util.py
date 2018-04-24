@@ -6,7 +6,10 @@
  @Software: PyCharm
  @Description: 
 """
+import contextlib
+
 import redis
+from redis import WatchError
 from tornadoredis import Client
 
 from config import settings
@@ -24,7 +27,6 @@ DEFAULT_EXPIRE = 60 * 60 * 2
 
 
 class RedisUtil(object):
-
     def __init__(self):
         self.conn = conn
 
@@ -84,7 +86,7 @@ class RedisUtil(object):
             item_lst = []
             for i in xrange(count):
                 cursor, data = self.conn.sscan(name, cursor=cursor,
-                                      match=match, count=batch)
+                                               match=match, count=batch)
                 if data:
                     item_lst.append(data)
                 if cursor == 0:
@@ -92,31 +94,57 @@ class RedisUtil(object):
             yield item_lst
 
 
+redis_conn = RedisUtil()
+
+
 def get_toredis_client():
     redis_client = Client(
-            host=settings.redis_host,
-            port=settings.redis_port,
-            selected_db=settings.redis_db,
-            password=settings.redis_password)
+        host=settings.redis_host,
+        port=settings.redis_port,
+        selected_db=settings.redis_db,
+        password=settings.redis_password)
     redis_client.connect()
     return redis_client
 
-redis_conn = RedisUtil()
+
+@contextlib.contextmanager
+def redispipeCM(*keys):
+    pipe = conn.pipeline()
+    try:
+        pipe.watch(*keys)
+        pipe.multi()
+        yield pipe
+    except WatchError:
+        pipe.reset()
+    except Exception, e:
+        raise
+    finally:
+        pipe.execute()
+        pipe.unwatch()
 
 
+class redisPipeline(object):
+    def __init__(self, *keys):
+        self.keys = keys
+        self.pipeline = None
+
+    def __enter__(self):
+        self.pipeline = conn.pipeline()
+        self.pipeline.watch(*self.keys)
+        self.pipeline.multi()
+        return self.pipeline
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print "__exit__:Close %s" % exc_tb
+        self.pipeline.execute()
+        self.pipeline.unwatch()
+
+    def __del__(self):
+        print "__del__"
 
 
 if __name__ == "__main__":
-    res = redis_conn.sadd("test_scan", *range(1500))
-    print res
-    # print redis_conn.get("a")
-    c = redis_conn.sscan_iter("test_scan", batch=50, count=3)
-    for d in c:
-        print len(d)
-        print d
-
-redis_conn = RedisUtil()
-
-# if __name__ == "__main__":
-#     redis_conn.set("a", 1)
-#     print redis_conn.get("a")
+    with redisPipeline("cc") as pipe:
+        pipe.set("cc", "123")
+        pipe.incr("cc")
+    print conn.get("cc")
