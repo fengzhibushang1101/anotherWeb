@@ -63,6 +63,7 @@ class WsHandler(WebSocketHandler, BaseHandler):
             chat_home.remove(self)
 
     def on_close(self):
+        self.client.unsubscribe([CHAT_CHANNEL])
         self.client.disconnect()
         chat_home.remove(self)
 
