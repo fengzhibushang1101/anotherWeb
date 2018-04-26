@@ -24,28 +24,33 @@ from task.func import get_joom_token, random_key
 import ujson as json
 
 
-def upsert_review(session, review):
+
+def upsert_review(review):
     logger.info(u"正在插入评论, no为%s" % review["review_no"])
+    connect = db.connect()
+    try:
+        sql = text('insert into joom_review (review_no,create_time,update_time,pro_no,variation_id,user_no,joom_review.language,origin_text,new_text,order_id,is_anonymous,colors,star,shop_no,photos) VALUES (:review_no,:create_time,:update_time,:pro_no,:variation_id,:user_no,:language,:origin_text,:new_text,:order_id,:is_anonymous,:colors,:star,:shop_no,:photos) on duplicate key update star=:star;')
+        cursor = connect.execute(sql, **review)
+        cursor.close()
+    except Exception, e:
+        logger.info(traceback.format_exc(e))
+    finally:
+        connect.close()
+
+
+def upsert_user(user):
+    logger.info(u"正在插入用户, no为%s" % user["user_no"])
+    connect = db.connect()
     try:
         sql = text(
-            'insert into joom_review (review_no,create_time,update_time,pro_no,variation_id,user_no,joom_review.language,origin_text,new_text,order_id,is_anonymous,colors,star,shop_no,photos) VALUES (:review_no,:create_time,:update_time,:pro_no,:variation_id,:user_no,:language,:origin_text,:new_text,:order_id,:is_anonymous,:colors,:star,:shop_no,:photos) on duplicate key update star=:star;')
-        session.excute(sql, review)
+            'insert into joom_user (user_no, full_name, images) values (:user_no, :full_name, :images) on duplicate key update full_name=:full_name, images = :images;')
+        cursor = connect.execute(sql, **user)
+        cursor.close()
     except Exception, e:
-        pass
+        logger.info(traceback.format_exc(e))
+    finally:
+        connect.close()
 
-def upsert_user(session, user):
-    logger.info(u"正在插入用户, no为%s" % user["user_no"])
-    try:
-        sql = text('insert into joom_user (user_no, full_name, images) values (:user_no, :full_name, :images) on duplicate key update full_name=:full_name, images = :images;')
-        session.execute(sql, user)
-    except Exception, e:
-        logger.error(traceback.format_exc(e))
-# def upsert_user(session, user):
-#     logger.info(u"正在插入用户, no为%s" % user["user_no"])
-#     try:
-#         session.excute(JoomUser.__table__.insert(), user)
-#     except Exception, e:
-#         pass
 
 def retrieve_review(reviews_info):
     try:
@@ -115,31 +120,28 @@ def fetch_review(tag, token, page_token=None):
     if content.get("payload"):
         reviews = content["payload"]["items"]
         review_datas, review_users, review_count = retrieve_review(reviews)
-        with sessionCM() as session:
             # if len(review_datas):
             #     session.execute(JoomReview.__table__.insert(), review_datas)
-            with futures.ThreadPoolExecutor(max_workers=16) as executor:
-                future_to_user = {
-                    executor.submit(upsert_review, session=session, review=review_data): review_data for review_data in review_datas
-                }
-                for future in futures.as_completed(future_to_user):
-                    rev_pro = future_to_user[future]
-                    try:
-                        rp = future.result()
-                    except Exception as exc:
-                        logger.error("%s generated an exception: %s" % (rev_pro, exc))
-            session.commit()
-            with futures.ThreadPoolExecutor(max_workers=16) as executor:
-                future_to_user = {
-                    executor.submit(upsert_user, session=session, user=rev_user): rev_user for rev_user in review_users
-                }
-                for future in futures.as_completed(future_to_user):
-                    rev_pro = future_to_user[future]
-                    try:
-                        rp = future.result()
-                    except Exception as exc:
-                        logger.error("%s generated an exception: %s" % (rev_pro, exc))
-            session.commit()
+        with futures.ThreadPoolExecutor(max_workers=32) as executor:
+            future_to_user = {
+                executor.submit(upsert_review, review=review_data): review_data for review_data in review_datas
+            }
+            for future in futures.as_completed(future_to_user):
+                rev_pro = future_to_user[future]
+                try:
+                    rp = future.result()
+                except Exception as exc:
+                    logger.error("%s generated an exception: %s" % (rev_pro, exc))
+        with futures.ThreadPoolExecutor(max_workers=32) as executor:
+            future_to_user = {
+                executor.submit(upsert_user, user=rev_user): rev_user for rev_user in review_users
+            }
+            for future in futures.as_completed(future_to_user):
+                rev_pro = future_to_user[future]
+                try:
+                    rp = future.result()
+                except Exception as exc:
+                    logger.error("%s generated an exception: %s" % (rev_pro, exc))
         if content["payload"].get("nextPageToken") and len(reviews):
             return fetch_review.delay(tag, token, page_token=content["payload"]["nextPageToken"])
     else:
