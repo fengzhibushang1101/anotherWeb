@@ -16,13 +16,13 @@ from lib.utils.logger_utils import logger
 from task import celery
 from task.fetch_review import fetch_review
 from task.fetch_pro import fetch_pro
-from task.func import get_joom_token
+from task.func import get_joom_token, random_key
 import ujson as json
 
 
 @celery.task(ignore_result=True)
 def fetch_cate_pro(token, cate_id, off=0):
-    url = 'https://api.joom.com/1.1/search/products?language=en-US&currency=USD'
+    url = 'https://api.joom.com/1.1/search/products?language=en-US&currency=USD&_=jfs3%s'
     params = {
         'count': 50,
         'pageToken': 'off:%s' % off,
@@ -37,7 +37,7 @@ def fetch_cate_pro(token, cate_id, off=0):
         }]
     }
     logger.info(u"正在抓取分类%s下第%s-%s个产品" % (cate_id, off, off + 50))
-    res = requests.post(url, data=json.dumps(params), headers={
+    res = requests.post(url % random_key(4), data=json.dumps(params), headers={
         "authorization": token,
         "content-type": 'application/json'
     })

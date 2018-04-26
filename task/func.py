@@ -6,6 +6,9 @@
  @Software: PyCharm
  @Description:
 """
+import random
+import string
+
 import requests
 
 
@@ -33,3 +36,6 @@ def get_joom_token():
         except Exception, e:
             return False
 
+
+def random_key(length=48):
+    return ''.join([random.choice(string.letters) for i in xrange(length)])

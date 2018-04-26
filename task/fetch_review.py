@@ -20,7 +20,7 @@ from lib.sql2.joom_user import JoomUser
 from lib.sql2.session import sessionCM
 from lib.utils.logger_utils import logger
 from task import celery
-from task.func import get_joom_token
+from task.func import get_joom_token, random_key
 import ujson as json
 
 
@@ -95,7 +95,7 @@ def retrieve_review(reviews_info):
 
 @celery.task(ignore_result=True)
 def fetch_review(tag, token, page_token=None):
-    url = "https://api.joom.com/1.1/products/%s/reviews?=all&count=1000&sort=top&language=en-US&currency=USD" % tag
+    url = "https://api.joom.com/1.1/products/%s/reviews?=all&count=1000&sort=top&language=en-US&currency=USD&_=jfs3%s" % (tag, random_key(4))
     params = {
         "filter_id": "all",
         "count": 500,
