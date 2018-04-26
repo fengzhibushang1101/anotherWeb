@@ -30,7 +30,8 @@ def upsert_shop(shop):
         cursor.close()
     except Exception, e:
         logger.info(traceback.format_exc(e))
-
+    finally:
+        connect.close()
 
 
 def upsert_pro(pro):
