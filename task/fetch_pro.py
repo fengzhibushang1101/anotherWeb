@@ -149,7 +149,10 @@ def trans_pro(res):
 @celery.task(ignore_result=True)
 def fetch_pro(tag, token):
     data_url = 'https://api.joom.com/1.1/products/%s?language=en-US&currency=USD' % tag
-    res = requests.get(data_url, headers={"authorization": token})
+    try:
+        res = requests.get(data_url, headers={"authorization": token}, timeout=5)
+    except Exception,e:
+        res = requests.get(data_url, headers={"authorization": token}, timeout=5)
     if "unauthorized" in res.content:
         token = get_joom_token()
         fetch_pro(tag, token)

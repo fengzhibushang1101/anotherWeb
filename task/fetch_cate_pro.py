@@ -38,10 +38,16 @@ def fetch_cate_pro(token, cate_id, pgToken=None, times=1):
     if pgToken:
         params["pageToken"] = pgToken
     logger.info(u"正在抓取分类%s下第%s页产品" % (cate_id, times))
-    res = requests.post(url % random_key(4), data=json.dumps(params), headers={
-        "authorization": token,
-        "content-type": 'application/json'
-    })
+    try:
+        res = requests.post(url % random_key(4), data=json.dumps(params), headers={
+            "authorization": token,
+            "content-type": 'application/json'
+        }, timeout=15)
+    except Exception, e:
+        res = requests.post(url % random_key(4), data=json.dumps(params), headers={
+            "authorization": token,
+            "content-type": 'application/json'
+        }, timeout=15)
     if "unauthorized" in res.content:
         token = get_joom_token()
         fetch_cate_pro.delay(token, cate_id, pgToken, times)
