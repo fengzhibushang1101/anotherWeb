@@ -116,10 +116,18 @@ def fetch_review(tag, token, page_token=None):
         reviews = content["payload"]["items"]
         review_datas, review_users, review_count = retrieve_review(reviews)
         with sessionCM() as session:
-            if len(review_datas):
-                session.execute(JoomReview.__table__.insert(), review_datas)
-            # if len(review_users):
-            #     session.execute(JoomUser.__table__.insert(), review_users)
+            # if len(review_datas):
+            #     session.execute(JoomReview.__table__.insert(), review_datas)
+            with futures.ThreadPoolExecutor(max_workers=16) as executor:
+                future_to_user = {
+                    executor.submit(upsert_review, session=session, review=review_data): review_data for review_data in review_datas
+                }
+                for future in futures.as_completed(future_to_user):
+                    rev_pro = future_to_user[future]
+                    try:
+                        rp = future.result()
+                    except Exception as exc:
+                        logger.error("%s generated an exception: %s" % (rev_pro, exc))
             session.commit()
             with futures.ThreadPoolExecutor(max_workers=16) as executor:
                 future_to_user = {
