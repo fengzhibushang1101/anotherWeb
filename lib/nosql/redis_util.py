@@ -120,7 +120,7 @@ def redispipeCM(*keys):
         raise
     finally:
         pipe.execute()
-        pipe.unwatch()
+        pipe.reset()
 
 
 class redisPipeline(object):

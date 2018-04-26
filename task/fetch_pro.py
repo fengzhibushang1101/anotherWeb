@@ -147,7 +147,7 @@ def fetch_pro(tag, token):
     res = requests.get(data_url, headers={"authorization": token})
     if "unauthorized" in res.content:
         token = get_joom_token()
-        fetch_pro.delay(tag, token)
+        fetch_pro(tag, token)
         return
     content = json.loads(res.content)
     connect = db.connect()
