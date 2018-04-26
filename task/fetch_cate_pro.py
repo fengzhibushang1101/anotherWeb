@@ -21,11 +21,10 @@ import ujson as json
 
 
 @celery.task(ignore_result=True)
-def fetch_cate_pro(token, cate_id, off=0):
+def fetch_cate_pro(token, cate_id, pgToken=None, times=1):
     url = 'https://api.joom.com/1.1/search/products?language=en-US&currency=USD&_=jfs3%s'
     params = {
         'count': 50,
-        'pageToken': 'off:%s' % off,
         'filters': [{
             'id': 'categoryId',
             'value': {
@@ -36,14 +35,16 @@ def fetch_cate_pro(token, cate_id, off=0):
             }
         }]
     }
-    logger.info(u"正在抓取分类%s下第%s-%s个产品" % (cate_id, off, off + 50))
+    if pgToken:
+        params["pageToken"] = pgToken
+    logger.info(u"正在抓取分类%s下第%s页产品" % (cate_id, times))
     res = requests.post(url % random_key(4), data=json.dumps(params), headers={
         "authorization": token,
         "content-type": 'application/json'
     })
     if "unauthorized" in res.content:
         token = get_joom_token()
-        fetch_cate_pro.delay(token, cate_id, off)
+        fetch_cate_pro.delay(token, cate_id, pgToken, times)
         return
 
     content = json.loads(res.content)
@@ -64,6 +65,8 @@ def fetch_cate_pro(token, cate_id, off=0):
                     rp = future.result()
                 except Exception as exc:
                     logger.error("%s generated an exception: %s" % (rev_pro, exc))
-        fetch_cate_pro.delay(token, cate_id, off+50)
+        if "nextPageToken" in content["payload"]:
+            fetch_cate_pro.delay(token, cate_id, content["payload"]["nextPageToken"], times+1)
+
 
 
