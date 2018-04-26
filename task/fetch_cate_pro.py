@@ -61,7 +61,7 @@ def fetch_cate_pro(token, cate_id, pgToken=None, times=1):
         for item in items:
             logger.info(u'产品id为%s' % item["id"])
             fetch_review.delay(item["id"], token)
-        with futures.ThreadPoolExecutor(max_workers=32) as executor:
+        with futures.ThreadPoolExecutor(max_workers=16) as executor:
             future_to_user = {
                 executor.submit(fetch_pro, tag=item["id"], token=token): item["id"] for item in items
             }

@@ -29,7 +29,7 @@ def upsert_review(review):
     logger.info(u"正在插入评论, no为%s" % review["review_no"])
     connect = db.connect()
     try:
-        sql = text('insert into joom_review (review_no,create_time,update_time,pro_no,variation_id,user_no,joom_review.language,origin_text,new_text,order_id,is_anonymous,colors,star,shop_no,photos) VALUES (:review_no,:create_time,:update_time,:pro_no,:variation_id,:user_no,:language,:origin_text,:new_text,:order_id,:is_anonymous,:colors,:star,:shop_no,:photos) on duplicate key update star=:star;')
+        sql = text('insert ignore  into joom_review (review_no,create_time,update_time,pro_no,variation_id,user_no,joom_review.language,origin_text,new_text,order_id,is_anonymous,colors,star,shop_no,photos) VALUES (:review_no,:create_time,:update_time,:pro_no,:variation_id,:user_no,:language,:origin_text,:new_text,:order_id,:is_anonymous,:colors,:star,:shop_no,:photos) ')
         cursor = connect.execute(sql, **review)
         cursor.close()
     except Exception, e:
@@ -43,7 +43,7 @@ def upsert_user(user):
     connect = db.connect()
     try:
         sql = text(
-            'insert into joom_user (user_no, full_name, images) values (:user_no, :full_name, :images) on duplicate key update full_name=:full_name, images = :images;')
+            'insert ignore into joom_user (user_no, full_name, images) values (:user_no, :full_name, :images)')
         cursor = connect.execute(sql, **user)
         cursor.close()
     except Exception, e:
