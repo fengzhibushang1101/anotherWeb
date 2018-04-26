@@ -33,7 +33,7 @@ def upsert_shop(shop):
 
 
 
-def upsert_pro(connect, pro):
+def upsert_pro(pro):
     logger.info(u"正在插入产品, no为%s" % pro["pro_no"])
     connect = db.connect()
     try:
