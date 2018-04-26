@@ -105,13 +105,16 @@ def fetch_review(tag, token, page_token=None):
     url = "https://api.joom.com/1.1/products/%s/reviews?=all&count=1000&sort=top&language=en-US&currency=USD&_=jfs3%s" % (tag, random_key(4))
     params = {
         "filter_id": "all",
-        "count": 500,
+        "count": 200,
         "sort": "top"
     }
     if page_token:
         params["pageToken"] = page_token
     logger.info(u"正在第%s次抓取产品%s的评论, 参数为%s" % (1,  tag, params))
-    res = requests.get(url, params=params, headers={"authorization": token})
+    try:
+        res = requests.get(url, params=params, headers={"authorization": token}, timeout=20)
+    except Exception:
+        res = requests.get(url, params=params, headers={"authorization": token}, timeout=20)
     if "unauthorized" in res.content:
         token = get_joom_token()
         fetch_review.delay(tag, token, page_token)
