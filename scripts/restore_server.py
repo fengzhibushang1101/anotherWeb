@@ -1,0 +1,931 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+ @Time    : 2018/5/10 13:57
+ @Author  : jyq
+ @Software: PyCharm
+ @Description: 
+"""
+from lib.sql.jx3_server import Jx3Server
+from lib.sql.qiyu_type import QiyuType
+from lib.sql.session import sessionCM
+
+servers = {
+    u"劍俠情緣叁": [{
+        "name": u"傲血戰意",
+        "language": u"zhtw"
+    }, {
+        "name": u"巔峰再起",
+        "language": u"zhtw"
+    }, {
+        "name": u"江海雲夢",
+        "language": u"zhtw"
+    }],
+    u"电信一区": [{
+        "name": u"长安城",
+        "language": u"zhcn"
+    }, {
+        "name": u"龙争虎斗",
+        "language": u"zhcn"
+    }, {
+        "name": u"逍遥林",
+        "language": u"zhcn"
+    }, {
+        "name": u"白帝城",
+        "language": u"zhcn"
+    }, {
+        "name": u"金蛇漫舞",
+        "language": u"zhcn"
+    }, {
+        "name": u"红尘寻梦",
+        "language": u"zhcn"
+    }, {
+        "name": u"情深似海",
+        "language": u"zhcn"
+    }, {
+        "name": u"蝶恋花",
+        "language": u"zhcn"
+    }],
+    u"电信二区": [{
+        "name": u"风花雪月",
+        "language": u"zhcn"
+    }, {
+        "name": u"相知莫问",
+        "language": u"zhcn"
+    }, {
+        "name": u"荻花宫",
+        "language": u"zhcn"
+    }],
+    u"电信三区": [{
+        "name": u"三星望月",
+        "language": u"zhcn"
+    }, {
+        "name": u"微山书院",
+        "language": u"zhcn"
+    }, {
+        "name": u"秀明尘身",
+        "language": u"zhcn"
+    }, {
+        "name": u"秦王殿",
+        "language": u"zhcn"
+    }],
+    u"电信四区": [{
+        "name": u"初心不泯",
+        "language": u"zhcn"
+    }, {
+        "name": u"日月明尊",
+        "language": u"zhcn"
+    }, {
+        "name": u"沁园春",
+        "language": u"zhcn"
+    }],
+    u"电信五区": [{
+        "name": u"乾坤一掷",
+        "language": u"zhcn"
+    }, {
+        "name": u"剑胆琴心",
+        "language": u"zhcn"
+    }, {
+        "name": u"千岛湖",
+        "language": u"zhcn"
+    }, {
+        "name": u"唯我独尊",
+        "language": u"zhcn"
+    }, {
+        "name": u"平步青云",
+        "language": u"zhcn"
+    }, {
+        "name": u"幽月轮",
+        "language": u"zhcn"
+    }, {
+        "name": u"斗转星移",
+        "language": u"zhcn"
+    }, {
+        "name": u"梦江南",
+        "language": u"zhcn"
+    }, {
+        "name": u"金榜题名",
+        "language": u"zhcn"
+    }, {
+        "name": u"华山论剑",
+        "language": u"zhcn"
+    }, {
+        "name": u"满江红",
+        "language": u"zhcn"
+    }, {
+        "name": u"枫泾古镇",
+        "language": u"zhcn"
+    }, {
+        "name": u"如梦令",
+        "language": u"zhcn"
+    }, {
+        "name": u"笑傲江湖",
+        "language": u"zhcn"
+    }, {
+        "name": u"圣墓山",
+        "language": u"zhcn"
+    }, {
+        "name": u"风雨同舟",
+        "language": u"zhcn"
+    }, {
+        "name": u"金戈铁马",
+        "language": u"zhcn"
+    }],
+    u"电信六区": [{
+        "name": u"倾国倾城",
+        "language": u"zhcn"
+    }, {
+        "name": u"名扬四海",
+        "language": u"zhcn"
+    }, {
+        "name": u"大圣归来",
+        "language": u"zhcn"
+    }],
+    u"电信七区": [{
+        "name": u"一苇渡江",
+        "language": u"zhcn"
+    }, {
+        "name": u"仙侣庭园",
+        "language": u"zhcn"
+    }],
+    u"电信八区": [{
+        "name": u"亢龙有悔",
+        "language": u"zhcn"
+    }, {
+        "name": u"引仙水榭",
+        "language": u"zhcn"
+    }, {
+        "name": u"战无不胜",
+        "language": u"zhcn"
+    }, {
+        "name": u"暗香掠影",
+        "language": u"zhcn"
+    }, {
+        "name": u"百家争鸣",
+        "language": u"zhcn"
+    }, {
+        "name": u"绝代天骄",
+        "language": u"zhcn"
+    }, {
+        "name": u"风骨霸刀",
+        "language": u"zhcn"
+    }, {
+        "name": u"大明宫",
+        "language": u"zhcn"
+    }, {
+        "name": u"致青春",
+        "language": u"zhcn"
+    }, {
+        "name": u"侠骨柔情",
+        "language": u"zhcn"
+    }, {
+        "name": u"梦回大唐",
+        "language": u"zhcn"
+    }],
+    u"网通(一\/二)区": [{
+        "name": u"叶芷青",
+        "language": u"zhcn"
+    }, {
+        "name": u"百转千回",
+        "language": u"zhcn"
+    }, {
+        "name": u"花月别院",
+        "language": u"zhcn"
+    }, {
+        "name": u"行者无疆",
+        "language": u"zhcn"
+    }],
+    u"双线一区": [{
+        "name": u"双剑合璧",
+        "language": u"zhcn"
+    }, {
+        "name": u"天下归一",
+        "language": u"zhcn"
+    }, {
+        "name": u"日月凌空",
+        "language": u"zhcn"
+    }, {
+        "name": u"比翼齐飞",
+        "language": u"zhcn"
+    }, {
+        "name": u"鹏程万里",
+        "language": u"zhcn"
+    }, {
+        "name": u"飞鸢泛月",
+        "language": u"zhcn"
+    }, {
+        "name": u"天鹅坪",
+        "language": u"zhcn"
+    }, {
+        "name": u"破阵子",
+        "language": u"zhcn"
+    }, {
+        "name": u"雪絮金屏",
+        "language": u"zhcn"
+    }, {
+        "name": u"五台山",
+        "language": u"zhcn"
+    }],
+    u"双线二区": [{
+        "name": u"四海一家",
+        "language": u"zhcn"
+    }, {
+        "name": u"风雷刀谷",
+        "language": u"zhcn"
+    }, {
+        "name": u"李忘生",
+        "language": u"zhcn"
+    }, {
+        "name": u"飞龙在天",
+        "language": u"zhcn"
+    }, {
+        "name": u"松烟竹雾",
+        "language": u"zhcn"
+    }],
+    u"双线三区": [{
+        "name": u"千古风流",
+        "language": u"zhcn"
+    }, {
+        "name": u"碧海青天",
+        "language": u"zhcn"
+    }, {
+        "name": u"星火燎原",
+        "language": u"zhcn"
+    }, {
+        "name": u"锦绣山河",
+        "language": u"zhcn"
+    }, {
+        "name": u"大美江湖",
+        "language": u"zhcn"
+    }, {
+        "name": u"春花秋月",
+        "language": u"zhcn"
+    }],
+    u"电信PVP搞事区": [{
+        "name": u"百无禁忌",
+        "language": u"zhcn"
+    }],
+    u"双线PVP搞事区": [{
+        "name": u"止戈为武",
+        "language": u"zhcn"
+    }],
+    u"测试区": [{
+        "name": u"从军行",
+        "language": u"zhcn"
+    }, {
+        "name": u"黑云压城",
+        "language": u"zhcn"
+    }, {
+        "name": u"夜雨寄北",
+        "language": u"zhcn"
+    }, {
+        "name": u"山居秋暝",
+        "language": u"zhcn"
+    }, {
+        "name": u"独步寻花",
+        "language": u"zhcn"
+    }, {
+        "name": u"望月怀远",
+        "language": u"zhcn"
+    }, {
+        "name": u"汉江临眺",
+        "language": u"zhcn"
+    }, {
+        "name": u"枫桥夜泊",
+        "language": u"zhcn"
+    }, {
+        "name": u"步月登云",
+        "language": u"zhcn"
+    }, {
+        "name": u"长风破浪",
+        "language": u"zhcn"
+    }, {
+        "name": u"非诚勿扰",
+        "language": u"zhcn"
+    }, {
+        "name": u"将进酒",
+        "language": u"zhcn"
+    }, {
+        "name": u"夕颜阁",
+        "language": u"zhcn"
+    }, {
+        "name": u"琅玉庭院",
+        "language": u"zhcn"
+    }, {
+        "name": u"厉兵秣马",
+        "language": u"zhcn"
+    }, {
+        "name": u"山雨欲来",
+        "language": u"zhcn"
+    }, {
+        "name": u"无极镇",
+        "language": u"zhcn"
+    }]
+}
+serendipities = [{
+    "name": u"一念間",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"一念间",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"三尺青鋒",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"三尺青锋",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"三山四海",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"东海客",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"乱世舞姬",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"亂世舞姬",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"儿女事",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"兒女事",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"关外商",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"兽王佩",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"冰蓝花客",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"冰藍花客",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"勝負局",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"化玉玄晶",
+    "type": u"物品奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"北行鏢",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"北行镖",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"哈皮",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"商周客",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"嘟嘟",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"塞外宝驹",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"塞外寶駒",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"大哈",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"天涯无归",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"天涯無歸",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"孩童书",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"孩童書",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"小果",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"小灰",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"小花",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"小諾",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"小诺",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"小錦",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"小锦",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"少年行",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"平生心愿",
+    "type": u"其它奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"平生心願",
+    "type": u"其它奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"归乡路",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"戎馬邊",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"戎马边",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"扶搖九天",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"扶摇九天",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"护佑苍生",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"捉妖記",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"捉妖记",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"故园风雨",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"故園風雨",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"斯文败类",
+    "type": u"未分类",
+    "languages": u""
+}, {
+    "name": u"東海客",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"果果",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"枫林酒",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"楓林酒",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"歸鄉路",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"毛都没有",
+    "type": u"未分类",
+    "languages": u"zhcn"
+}, {
+    "name": u"沉沙玄晶",
+    "type": u"物品奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"沙海謠",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"沙海谣",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"清茗經",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"清茗经",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"清風捕王",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"清风捕王",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"滇南行",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"炼狱厨神",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"烟花戏·春",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"烟花戏·月",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"烟花戏·秋",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"烟花戏·风",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"烹調法",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"烹调法",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"煉獄廚神",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"煙花戲·春",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"煙花戲·月",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"煙花戲·秋",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"煙花戲·風",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"獸王佩",
+    "type": u"其它奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"瑞雪兆丰年",
+    "type": u"未分类",
+    "languages": u""
+}, {
+    "name": u"生死判",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"白雪忆",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"白雪憶",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"石敢当",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"石敢當",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"破晓鸣",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"破曉鳴",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"稚子心",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"稻稻",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"竹馬情",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"竹马情",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"紅羽大將軍",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"紅衣歌",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"红羽大将军",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"红衣歌",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"胜负局",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"至尊宝",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"至尊寶",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"茶館奇緣",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"茶館懸賞",
+    "type": u"其它奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"茶馆奇械",
+    "type": u"未分类",
+    "languages": u""
+}, {
+    "name": u"茶馆奇缘",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"茶馆悬赏",
+    "type": u"其它奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"荆轲刺",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"荊軻刺",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"虎啸山林",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"虎嘯山林",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"蟹仔",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹仕",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹兵",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹卒",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹士",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹将",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"蟹將",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"蟹帅",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"蟹帥",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"蟹炮",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹相",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹砲",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹象",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"蟹車·紅",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"蟹車·藍",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"蟹车·红",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"蟹车·蓝",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"蟹馬·紅",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"蟹馬·藍",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"蟹马·红",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"蟹马·蓝",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"護佑蒼生",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"醉月玄晶",
+    "type": u"物品奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"鋒芒展",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"鍛劍女",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"锋芒展",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"锻剑女",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"關外商",
+    "type": u"宠物奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"阴阳两界",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"阿里",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"阿飛",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"阿飞",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"陰陽兩界",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"雪山恩仇",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"青草歌",
+    "type": u"宠物奇遇",
+    "languages": u"zhcn,zhtw"
+}, {
+    "name": u"静静",
+    "type": u"小宠奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"靜靜",
+    "type": u"小宠奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"韶华故",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"韶華故",
+    "type": u"绝世奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"飛仙玄晶",
+    "type": u"物品奇遇",
+    "languages": u"zhtw"
+}, {
+    "name": u"飞仙玄晶",
+    "type": u"物品奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"黑天",
+    "type": u"物品奇遇",
+    "languages": u"zhcn"
+}, {
+    "name": u"黑白路",
+    "type": u"绝世奇遇",
+    "languages": u"zhcn,zhtw"
+}]
+
+
+with sessionCM() as session:
+
+    for area_name in servers:
+        for server in servers[area_name]:
+            Jx3Server.create(session, **{
+                "area_name": area_name,
+                "server_name": server["name"],
+                "language": server["language"]
+            })
+
+    for s in serendipities:
+        QiyuType.create(session, **{
+            "qy_type": s["type"],
+            "qy_name": s["name"].encode("utf-8"),
+            "languages": s["languages"]
+        })

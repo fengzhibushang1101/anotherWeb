@@ -11,6 +11,9 @@ from lib.sql.base import metadata, db
 from lib.sql.user import User
 from lib.sql.gif_list import GifList
 from lib.sql.jx3_daily_record import Jx3DailyRecord
+from lib.sql.jx3_server import Jx3Server
+from lib.sql.qiyu_type import QiyuType
+from lib.sql.qy_record import QiyuRecord
 
 
 class CreateTables(object):
