@@ -25,8 +25,8 @@ class Jx3Info(object):
     def get_info(cls):
         current = redis.get(cls.REDIS_KEY)
         last_time = redis.get(cls.LAST_UPDATE_TIME)
-        info = cls.BATTLEGROUND_ORDER[int(current) % len(cls.BATTLEGROUND_ORDER)]
-        info = info[:].append(last_time)
+        info = cls.BATTLEGROUND_ORDER[int(current) % len(cls.BATTLEGROUND_ORDER)][:]
+        info.append(last_time)
         return info
 
     @classmethod
