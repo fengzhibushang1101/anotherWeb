@@ -66,6 +66,7 @@ class ApiHandler(BaseHandler):
 
     @run_on_executor
     def update_jx3_info(self):
-        res = Jx3Info.auto_add_one()
+        force = self.params.get('force')
+        res = Jx3Info.auto_add_one(force == '1')
         if res:
             return {"status": 1, "message": "更新成功"}

@@ -45,9 +45,9 @@ class Jx3Info(object):
                     pipe.reset()
 
     @classmethod
-    def auto_add_one(cls):
+    def auto_add_one(cls, force=False):
         last_time = redis.get(cls.LAST_UPDATE_TIME)
-        if last_time and not Timer.is_in_yesterday(last_time):
+        if not force and last_time and not Timer.is_in_yesterday(last_time):
             send_to_master("剑网三自动更新出错", "上次更新时间错误!")
             return False
         with redis.conn.pipeline() as pipe:
